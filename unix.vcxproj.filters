@@ -29,5 +29,8 @@
     <ClCompile Include="balfree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="format.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
