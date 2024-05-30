@@ -14,8 +14,8 @@ void format()
 	int i, j;
 	errno_t err;
 	//Create File_system file
-	err = fopen_s(&fd, "File_System", "r+w+b");
-	if (err == 0)
+	err = fopen_s(&fd, "File_System", "w");
+	if (err != 0)
 	{
 		fclose(fd);
 		printf("\nfile system file creat failed! \n");
@@ -30,16 +30,16 @@ void format()
 	fwrite(buf, 1, (DINODEBLK + FILEBLK + 2) * BLOCKSIZ * sizeof(char), fd);
 	/*0.initialize the passwd */
 	//改成文件
-	//passwd[0].p_uid = 2116; passwd[0].p_gid = 03;
-	//strcpy(passwd[0].password, "dddd");
-	//passwd[1].p_uid = 2117; passwd[1].p_gid = 03;
-	//strcpy(passwd[1].password, "bbbb");
-	//passwd[2].p_uid = 2118; passwd[2].p_gid = 04;
-	//strcpy(passwd[2].password, "abcd");
-	//passwd[3].p_uid = 2119; passwd[3].p_gid = 04;
-	//strcpy(passwd[3].password, "cccc");
-	//passwd[4].p_uid = 2220; passwd[4].p_gid = 05;
-	//strcpy(passwd[4].password, "eeee");
+	passwd[0].p_uid = 2116; passwd[0].p_gid = 03;
+	strcpy(passwd[0].password, "dddd");
+	passwd[1].p_uid = 2117; passwd[1].p_gid = 03;
+	strcpy(passwd[1].password, "bbbb");
+	passwd[2].p_uid = 2118; passwd[2].p_gid = 04;
+	strcpy(passwd[2].password, "abcd");
+	passwd[3].p_uid = 2119; passwd[3].p_gid = 04;
+	strcpy(passwd[3].password, "cccc");
+	passwd[4].p_uid = 2220; passwd[4].p_gid = 05;
+	strcpy(passwd[4].password, "eeee");
 	/*	1.creat the main directory and its sub dir etc and the file password */
 	inode = iget(0);	/* 0 empty dinode id */
 	inode->di_mode = DIEMPTY;
