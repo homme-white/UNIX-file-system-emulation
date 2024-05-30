@@ -78,7 +78,7 @@ struct filsys {//
 	unsigned short s_pfree;//空闲块指针
 	unsigned int s_free[NICFREE];//空闲块堆栈
 
-	unsigned int s_ninode;//空闲i索引节点指针
+	unsigned int s_ninode;//空闲i索引节点数
 	unsigned short s_pinode;//空闲i索引节点指针
 	unsigned int s_inode[NICINOD];//空闲i索引节点数组
 	unsigned int s_rinode;//铭记i索引节点
@@ -96,7 +96,7 @@ struct dir {
 	struct direct direct[DIRNUM];//目录项数组表示目录信息
 	int size;//目录项个数
 };
-//内存i节点哈希链表
+//内存i节点头指针
 struct hinode {
 	struct inode* i_forw;//队首由Hash表hinode中的i_forw指出 
 };
@@ -117,7 +117,7 @@ struct user {
 
 extern struct hinode hinode[NHINO];
 extern struct dir dir;	//当前目录（在内存中全部读入）
-extern struct file sys_ofile[SYSOPENFILE];	
+extern struct file sys_ofile[SYSOPENFILE];	//打开文件结构
 extern struct filsys filsys;	//内存中的超级块
 extern struct pwd pwd[PWDNUM];
 extern struct user user[USERNUM];
@@ -142,7 +142,7 @@ extern unsigned int read();
 extern unsigned int write();
 extern int    login();
 extern void   logout();
-extern void   install();
+extern void   install(); 
 extern void   format();
 extern void   close();
 extern void   halt();
