@@ -28,6 +28,7 @@ void format()
 	fseek(fd, 0, SEEK_SET);
 	fwrite(buf, 1, (DINODEBLK + FILEBLK + 2) * BLOCKSIZ * sizeof(char), fd);
 	/*0.initialize the passwd */
+	//改成文件
 	passwd[0].p_uid = 2116; passwd[0].p_gid = 03;
 	strcpy_s(passwd[0].password, "dddd");
 	passwd[1].p_uid = 2117; passwd[1].p_gid = 03;

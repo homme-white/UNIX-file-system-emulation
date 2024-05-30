@@ -28,17 +28,18 @@ struct inode* iget(unsigned int dinodeid)    /* iget( ) */
 	}
 	/*	1. calculate the addr of the dinode in the file sys column */
 	addr = DINODESTART + dinodeid * DINODESIZ;
-	/*	2. malloc the new mode */
+	/*	2. malloc the new inode */
 	newinode = (struct inode*)malloc(sizeof(struct inode));
-	/*	3.read the dinode to the mode */
+	/*	3.read the dinode to the inode */
 	fseek(fd, addr, SEEK_SET);
 	fread(&(newinode->di_number), DINODESIZ, 1, fd);
 	/* 4.put it into hinode[inodeid] queue */
 	newinode->i_forw = hinode[inodeid].i_forw;
 	newinode->i_back = newinode;
+	if()
 	newinode->i_forw->i_back = newinode;
 	hinode[inodeid].i_forw = newinode;
-	/* 5.initialize the mode */
+	/* 5.initialize the inode */
 	newinode->i_count = 1;
 	newinode->i_flag = 0;    /* flag for not update */
 	newinode->i_ino = dinodeid;
