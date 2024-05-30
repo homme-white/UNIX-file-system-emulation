@@ -1,4 +1,6 @@
 #ifndef _FILESYS_H_
+#define _FILESYS_H_
+
 #include <stdio.h>
 
 #define BLOCKSIZ  512  //每块大小
@@ -115,14 +117,14 @@ struct user {
 	unsigned short u_ofile[NOFILE];//用户打开文件表
 };
 
-extern struct hinode hinode[NHINO];
-extern struct dir dir;	//当前目录（在内存中全部读入）
-extern struct file sys_ofile[SYSOPENFILE];	//打开文件结构
-extern struct filsys filsys;	//内存中的超级块
-extern struct pwd pwd[PWDNUM];
-extern struct user user[USERNUM];
-extern        FILE* fd;
-extern struct inode* cur_path_inode;
+struct hinode hinode[NHINO];
+struct dir dir;	//当前目录（在内存中全部读入）
+struct file sys_ofile[SYSOPENFILE];	//打开文件结构
+struct filsys filsys;	//内存中的超级块
+struct pwd pwd[PWDNUM];
+struct user user[USERNUM];
+FILE* fd;
+struct inode* cur_path_inode;
 extern int    user_id;
 extern struct inode* iget(unsigned int dinodeid);
 extern void iput(struct inode* pinode);

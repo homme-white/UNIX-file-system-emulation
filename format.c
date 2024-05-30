@@ -2,6 +2,7 @@
 #include "filesys.h"
 #include <stdlib.h>
 #include <string.h>
+
 void format()
 {
 	struct inode* inode;
@@ -29,16 +30,16 @@ void format()
 	fwrite(buf, 1, (DINODEBLK + FILEBLK + 2) * BLOCKSIZ * sizeof(char), fd);
 	/*0.initialize the passwd */
 	//改成文件
-	passwd[0].p_uid = 2116; passwd[0].p_gid = 03;
-	strcpy_s(passwd[0].password, "dddd");
-	passwd[1].p_uid = 2117; passwd[1].p_gid = 03;
-	strcpy_s(passwd[1].password, "bbbb");
-	passwd[2].p_uid = 2118; passwd[2].p_gid = 04;
-	strcpy_s(passwd[2].password, "abcd");
-	passwd[3].p_uid = 2119; passwd[3].p_gid = 04;
-	strcpy_s(passwd[3].password, "cccc");
-	passwd[4].p_uid = 2220; passwd[4].p_gid = 05;
-	strcpy_s(passwd[4].password, "eeee");
+	//passwd[0].p_uid = 2116; passwd[0].p_gid = 03;
+	//strcpy(passwd[0].password, "dddd");
+	//passwd[1].p_uid = 2117; passwd[1].p_gid = 03;
+	//strcpy(passwd[1].password, "bbbb");
+	//passwd[2].p_uid = 2118; passwd[2].p_gid = 04;
+	//strcpy(passwd[2].password, "abcd");
+	//passwd[3].p_uid = 2119; passwd[3].p_gid = 04;
+	//strcpy(passwd[3].password, "cccc");
+	//passwd[4].p_uid = 2220; passwd[4].p_gid = 05;
+	//strcpy(passwd[4].password, "eeee");
 	/*	1.creat the main directory and its sub dir etc and the file password */
 	inode = iget(0);	/* 0 empty dinode id */
 	inode->di_mode = DIEMPTY;
@@ -48,11 +49,11 @@ void format()
 	inode->di_mode = DEFAULTMODE | DIDIR;
 	inode->di_size = 3 * (DIRSIZ + 2);
 	inode->di_addr[0] = 0;    /* block 0tfl is used by the main directory */
-	strcpy_s(dir_buf[0].d_name, "..");
+	strcpy(dir_buf[0].d_name, "..");
 	dir_buf[0].d_ino = 1;
-	strcpy_s(dir_buf[1].d_name, ".");
+	strcpy(dir_buf[1].d_name, ".");
 	dir_buf[1].d_ino = 1;
-	strcpy_s(dir_buf[2].d_name, "etc");
+	strcpy(dir_buf[2].d_name, "etc");
 	dir_buf[2].d_ino = 2;
 	fseek(fd, DATASTART, SEEK_SET);
 	fwrite(dir_buf, 1, 3 * (DIRSIZ + 2), fd);
@@ -62,11 +63,11 @@ void format()
 	inode->di_mode = DEFAULTMODE | DIDIR;
 	inode->di_size = 3 * (DIRSIZ + 2);
 	inode->di_addr[0] = 0;    /* block 0# is used by the etc */
-	strcpy_s(dir_buf[0].d_name, "..");
+	strcpy(dir_buf[0].d_name, "..");
 	dir_buf[0].d_ino = 1;
-	strcpy_s(dir_buf[1].d_name, "..");
+	strcpy(dir_buf[1].d_name, "..");
 	dir_buf[1].d_ino = 2;
-	strcpy_s(dir_buf[2].d_name, "password");
+	strcpy(dir_buf[2].d_name, "password");
 	dir_buf[2].d_ino = 3;
 	fseek(fd, DATASTART + BLOCKSIZ * 1, SEEK_SET);
 	fwrite(dir_buf, 1, 3 * (DIRSIZ + 2), fd);
@@ -80,7 +81,7 @@ void format()
 	{
 		passwd[i].p_uid = 0;
 		passwd[i].p_gid = 0;
-		strcpy_s(passwd[i].password, "	");
+		strcpy(passwd[i].password, "	");
 	}
 	fseek(fd, DATASTART + 2 * BLOCKSIZ, SEEK_SET);
 	fwrite(passwd, 1, BLOCKSIZ, fd);
@@ -123,7 +124,7 @@ void format()
 	fwrite(&filsys, 1, sizeof(struct filsys), fd);
 }
 //for test
-//int main()
-//{
-//	format();
-//}
+int main()
+{
+	format();
+}

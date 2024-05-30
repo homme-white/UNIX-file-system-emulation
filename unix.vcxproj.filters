@@ -20,19 +20,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ialfree.cpp">
+    <ClCompile Include="ialfree.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="igetput.cpp">
+    <ClCompile Include="igetput.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="balfree.cpp">
+    <ClCompile Include="balfree.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="format.cpp">
+    <ClCompile Include="format.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="install.cpp">
+    <ClCompile Include="install.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
