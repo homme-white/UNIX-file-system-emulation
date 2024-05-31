@@ -143,7 +143,7 @@ extern void   creat();
 extern unsigned int read();
 extern unsigned int write();
 extern int    login();
-extern void   logout();
+int  logout();
 void   install(); 
 void   format();
 extern void   close();
