@@ -2,3 +2,6 @@ File_System
 x64/
 .vs/
 
+/unix/Debug/unix.tlog
+/unix/Debug
+/File_System
