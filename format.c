@@ -15,7 +15,7 @@ void format()
 	int i, j;
 	errno_t err;
 	//Create File_system file
-	err = fopen_s(&fd, "File_System", "w");
+	err = fopen_s(&fd, "File_System", "wt+");
 	if (err != 0)
 	{
 		fclose(fd);
@@ -49,7 +49,7 @@ void format()
 	inode->di_number = 1;
 	inode->di_mode = DEFAULTMODE | DIDIR;
 	inode->di_size = 3 * (DIRSIZ + 2);
-	inode->di_addr[0] = 0;    /* block 0tfl is used by the main directory */
+	inode->di_addr[0] = 0;    /* block 0# is used by the main directory */
 	strcpy(dir_buf[0].d_name, "..");
 	dir_buf[0].d_ino = 1;
 	strcpy(dir_buf[1].d_name, ".");
@@ -107,7 +107,7 @@ void format()
 	fwrite(block_buf, 1, BLOCKSIZ, fd);
 	for (i = FILEBLK - NICFREE - 1; i > 2; i -= NICFREE)
 	{
-		for (j = 0; j < min(NICFREE,i); j++)
+		for (j = 0; j < min(NICFREE, i); j++)
 		{
 			block_buf[j] = i - j;
 			//printf("%d ", block_buf[j]);测试有负数，需要考虑会不会有干扰,min(NICFREE,i)
@@ -125,6 +125,7 @@ void format()
 	filsys.s_pinode = 0;
 	fseek(fd, BLOCKSIZ, SEEK_SET);
 	fwrite(&filsys, 1, sizeof(struct filsys), fd);
+	fclose(fd);
 }
 //for test
 //int main()
