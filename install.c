@@ -10,7 +10,7 @@ void install()
 	int i, j;
 	/*0.open the file column */
 	err = fopen_s(&fd, "File_System", "rt+");
-	if (err != 0)
+	if (err == 0)
 	{
 		fclose(fd);
 		printf("\nfile system file creat failed! \n");
@@ -57,11 +57,9 @@ void install()
 	fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);
 	fread(&dir.direct[(BLOCKSIZ) / (DIRSIZ + 2) * i], 1, cur_path_inode->di_size % BLOCKSIZ, fd);
 }
-
 //for test
-//int main()
-//{
-//
-//	format();
-//	install();
-//}
+int main()
+{
+	void format();
+	void install();
+}

@@ -153,10 +153,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="install.c" />
-    <ClCompile Include="log.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="File_System" />
+    <ClCompile Include="name.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

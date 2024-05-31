@@ -107,7 +107,7 @@ void format()
 	fwrite(block_buf, 1, BLOCKSIZ, fd);
 	for (i = FILEBLK - NICFREE - 1; i > 2; i -= NICFREE)
 	{
-		for (j = 0; j < min(NICFREE,i); j++)
+		for (j = 0; j < min(NICFREE, i); j++)
 		{
 			block_buf[j] = i - j;
 			//printf("%d ", block_buf[j]);测试有负数，需要考虑会不会有干扰,min(NICFREE,i)

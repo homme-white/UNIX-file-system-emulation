@@ -35,7 +35,7 @@
     <ClCompile Include="install.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="log.c">
+    <ClCompile Include="name.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -43,8 +43,6 @@
     <None Include="File_System">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="File_System">
-      <Filter>资源文件</Filter>
-    </None>
+
   </ItemGroup>
 </Project>
