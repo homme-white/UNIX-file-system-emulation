@@ -154,6 +154,7 @@
     </ClCompile>
     <ClCompile Include="install.c" />
     <ClCompile Include="name.c" />
+    <ClCompile Include="UNIX_COMMEND.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

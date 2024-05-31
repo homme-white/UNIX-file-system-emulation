@@ -38,11 +38,8 @@
     <ClCompile Include="name.c">
       <Filter>源文件</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="File_System">
-      <Filter>资源文件</Filter>
-    </None>
-
+    <ClCompile Include="UNIX_COMMEND.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

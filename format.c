@@ -128,8 +128,8 @@ void format()
 	fclose(fd);
 }
 //for test
-int main()
-{
-	format();
-	install();
-}
+//int main()
+//{
+//	format();
+//	install();
+//}

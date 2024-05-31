@@ -2,8 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "filesys.h"
-unsigned int namei(name) /* namei */
-char* name;
+unsigned int namei(char* name) /* namei */
 {
 	int i, notfound = 1;
 	for (i = 0; ((i < dir.size) && (notfound)); i++)
@@ -15,8 +14,7 @@ char* name;
 	return NULL;
 };
 
-unsigned short iname(name)	/* iname */
-char* name;
+unsigned short iname(char* name)	/* iname */
 {
 	int i, notfound = 1;
 	for (i = 0; ((i < DIRNUM) && (notfound)); i++)
@@ -38,3 +36,24 @@ char* name;
 		return i;
 	}
 }
+
+char* GetFilename(char* p)
+{
+	char ch = '\\';
+	char* q = strrchr(p, ch);
+	int length;
+	if (q != NULL) {
+		length = strlen(p) - strlen(q);
+		*(p + length) = '\0';
+		return q + 1;
+	}
+	return q;
+}
+
+//int main() {
+//	char name[30] = "baobaobaba\\baoerzi";
+//	char* a;
+//	while ((a = getfilename(name))!=null)
+//	printf("%s", a);
+//	printf("%s", name);
+//}

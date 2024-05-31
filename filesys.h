@@ -149,5 +149,5 @@ void   format();
 extern void   close();
 extern void   halt();
 extern void   delete_f();//删除文件函数delete_f
-
+char* GetFilename(char* p);//获取文件名
 #endif // !_FILESYS_H_
