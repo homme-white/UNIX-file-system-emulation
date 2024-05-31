@@ -43,8 +43,6 @@
     <None Include="File_System">
       <Filter>资源文件</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="File_System">
       <Filter>资源文件</Filter>
     </None>
