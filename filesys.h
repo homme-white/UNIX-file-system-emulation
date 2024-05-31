@@ -70,7 +70,7 @@ struct dinode {
 //目录项
 struct direct {
 	char d_name[DIRSIZ];//目录名称
-	unsigned int d_ino;//ID
+	unsigned short d_ino;//指向i节点
 };
 //超级块
 struct filsys {//
@@ -129,7 +129,7 @@ extern int    user_id;
 extern struct inode* iget(unsigned int dinodeid);
 extern void iput(struct inode* pinode);
 extern unsigned int balloc();
-extern void  bfree();
+extern void  bfree(unsigned int block_num);
 extern struct inode* ialloc();//i节点分配
 extern void ifree(unsigned dinodeid);//i节点释放
 extern unsigned int namei();
@@ -144,8 +144,8 @@ extern unsigned int read();
 extern unsigned int write();
 extern int    login();
 extern void   logout();
-extern void   install(); 
-extern void   format();
+void   install(); 
+void   format();
 extern void   close();
 extern void   halt();
 extern void   delete_f();//删除文件函数delete_f

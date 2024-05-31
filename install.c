@@ -9,7 +9,7 @@ void install()
 	errno_t err;
 	int i, j;
 	/*0.open the file column */
-	err = fopen_s(&fd, "File_System", "r+w+b");
+	err = fopen_s(&fd, "File_System", "wt+s");
 	if (err == 0)
 	{
 		fclose(fd);
@@ -40,7 +40,7 @@ void install()
 		}
 	}
 	/* 5. read the main directory to initialize the dir */
-	cur_path_inode = iget(1);
+	cur_path_inode = iget(1);//main
 	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);
 	for (i = 0; i < DIRNUM; i++)
 	{
@@ -54,4 +54,11 @@ void install()
 	}
 	fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);
 	fread(&dir.direct[(BLOCKSIZ) / (DIRSIZ + 2) * i], 1, cur_path_inode->di_size % BLOCKSIZ, fd);
+}
+
+//for test
+int main()
+{
+	void format();
+	void install();
 }
