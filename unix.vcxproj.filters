@@ -56,5 +56,14 @@
     <ClCompile Include="open.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="close.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rdwt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="File_System" />
   </ItemGroup>
 </Project>
