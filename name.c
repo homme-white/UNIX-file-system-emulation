@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "filesys.h"
-unsigned int namei(char* name) /* namei */
+unsigned int namei(char* name) /* namei查找名为name的文件 */
 {
 	int i, notfound = 1;
 	for (i = 0; ((i < dir.size) && (notfound)); i++)
@@ -51,9 +51,11 @@ char* GetFilename(char* p)
 }
 
 //int main() {
-//	char name[30] = "baobaobaba\\baoerzi";
+//	char name[30] = "baobaobaba\\baoerzi\\abcde";
 //	char* a;
-//	while ((a = getfilename(name))!=null)
-//	printf("%s", a);
+//	while ((a = GetFilename(name)) != NULL)
+//	{
+//		printf("%s\n", a);
+//	}
 //	printf("%s", name);
 //}

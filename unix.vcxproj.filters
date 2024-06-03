@@ -41,5 +41,20 @@
     <ClCompile Include="UNIX_COMMEND.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="halt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="log.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dir.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="open.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
