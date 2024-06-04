@@ -32,7 +32,7 @@ unsigned short iname(char* name)	/* iname */
 	}
 	else
 	{
-		strcpy(name, dir.direct[i].d_name);
+		strcpy(dir.direct[i].d_name, name);
 		return i;
 	}
 }

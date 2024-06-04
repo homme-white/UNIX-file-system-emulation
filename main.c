@@ -4,15 +4,15 @@
 #include <stdlib.h>
 #include <conio.h>
 
-struct hinode hinode[NHINO];
-struct dir dir;
-struct file sys_ofile[SYSOPENFILE];
-struct filsys filsys;
-struct pwd pwd[PWDNUM];
-struct user user[USERNUM];
-FILE* fd;
-struct inode* cur_path_inode;
-int user_id;
+//struct hinode hinode[NHINO];
+//struct dir dir;
+//struct file sys_ofile[SYSOPENFILE];
+//struct filsys filsys;
+//struct pwd pwd[PWDNUM];
+//struct user user[USERNUM];
+//FILE* fd;
+//struct inode* cur_path_inode;
+//int user_id;
 
 void main()
 {
@@ -20,10 +20,10 @@ void main()
 	unsigned short bhy_fd1;
 	char* buf;
 
-	printf("\nDo you want to format the disk \n");
+	/*printf("\nDo you want to format the disk \n");
 	if (getch() == 'y')
 		printf("\nFormat Will erase all context on the disk \nAre You Sure! (y(es)/n(o)! \n");
-	if (getch() == 'y')
+	if (getch() == 'y')*/
 		format();
 
 	install();

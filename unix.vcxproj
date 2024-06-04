@@ -161,6 +161,9 @@
     <ClCompile Include="open.c" />
     <ClCompile Include="UNIX_COMMEND.c" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="File_System" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

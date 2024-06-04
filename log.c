@@ -6,9 +6,15 @@
 int login(unsigned short uid, char* passwd)//µÇÂ¼
 {
 	int i, j;
+	struct pwd tmp;
+	char name[PWDSIZ];
+	fseek(fd, DATASTART + 2 * BLOCKSIZ, SEEK_SET);
+	fread(&pwd[0], 1, BLOCKSIZ, fd);
 	for (i = 0; i < PWDNUM; i++)
 	{
-		if ((uid == pwd[i].p_uid) && (strcmp(passwd, pwd[i].password)))
+		tmp = pwd[i];
+		strcpy(name, passwd);
+		if ((uid == pwd[i].p_uid) && ~(strcmp(passwd, name)))
 		{
 			for (j = 0; j < USERNUM; j++)
 				if (user[j].u_uid == 0) break;
