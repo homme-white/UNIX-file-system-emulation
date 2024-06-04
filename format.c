@@ -107,24 +107,27 @@ void format()
 	fwrite(block_buf, 1, BLOCKSIZ, fd);
 	for (i = FILEBLK - NICFREE - 1; i > 2; i -= NICFREE)
 	{
-		for (j = 0; j < min(NICFREE, i); j++)
+		for (j = 0; j < NICFREE; j++)
 		{
 			block_buf[j] = i - j;
 			//printf("%d ", block_buf[j]);测试有负数，需要考虑会不会有干扰,min(NICFREE,i)
 		}
 		//printf("\n");
+		block_buf[j] = 50;
 		fseek(fd, DATASTART + BLOCKSIZ * (i - 1), SEEK_SET);//组长块位置
 		fwrite(block_buf, 1, BLOCKSIZ, fd);
 	}
-	j = 1;
-	for (i = i; i > 2; i--)
+	j = i + NICFREE;
+	for (i = j; i > 2; i--)
 	{
-		filsys.s_free[NICFREE + i - j] = i;
+		filsys.s_free[NICFREE - 1 + i - j] = i;
 	}
-	filsys.s_pfree = NICFREE - j;
+	filsys.s_pfree = NICFREE - 1 -j + 3;
 	filsys.s_pinode = 0;
 	fseek(fd, BLOCKSIZ, SEEK_SET);
 	fwrite(&filsys, 1, sizeof(struct filsys), fd);
+	//fseek(fd, BLOCKSIZ, SEEK_SET);
+	//fread(&filsys.s_isize, 1, sizeof(struct filsys), fd);
 	fclose(fd);
 }
 //for test
