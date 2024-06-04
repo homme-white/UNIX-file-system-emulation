@@ -49,7 +49,7 @@ void install()
 		strcpy(dir.direct[i].d_name, "                 ");
 		dir.direct[i].d_ino = 0;
 	}
-	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2)) - 1 ; i++)//文件个数/目录表大小（32） - 1（后面有初始化）
+	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2))-1; i++)
 	{
 		//printf("%d___", DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i]);
 		fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);
