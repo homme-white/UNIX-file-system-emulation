@@ -1,3 +1,4 @@
+/*文件初始化*/
 #include <stdio.h>
 #include "filesys.h"
 #include <stdlib.h>
@@ -6,15 +7,15 @@
 void format()
 {
 	struct inode* inode;
-	struct direct dir_buf[BLOCKSIZ / (DIRSIZ + 2)];
-	struct pwd passwd[BLOCKSIZ / (PWDSIZ + 4)];
+	struct direct dir_buf[BLOCKSIZ / (DIRSIZ + 2)];	//name + unsign short
+	struct pwd passwd[BLOCKSIZ / (PWDSIZ + 4)];	//name + unsign short*2
 	struct filsys filsys;
-	unsigned int block_buf[BLOCKSIZ / sizeof(int)];
+	unsigned int block_buf[BLOCKSIZ / sizeof(int)];//内存中的缓冲块
 	char* buf;
 	int i, j;
 	errno_t err;
 	//Create File_system file
-	err = fopen_s(&fd, "File_System", "w");
+	err = fopen_s(&fd, "File_System", "wt+");
 	if (err != 0)
 	{
 		fclose(fd);
@@ -48,7 +49,7 @@ void format()
 	inode->di_number = 1;
 	inode->di_mode = DEFAULTMODE | DIDIR;
 	inode->di_size = 3 * (DIRSIZ + 2);
-	inode->di_addr[0] = 0;    /* block 0tfl is used by the main directory */
+	inode->di_addr[0] = 0;    /* block 0# is used by the main directory */
 	strcpy(dir_buf[0].d_name, "..");
 	dir_buf[0].d_ino = 1;
 	strcpy(dir_buf[1].d_name, ".");
@@ -65,7 +66,7 @@ void format()
 	inode->di_addr[0] = 0;    /* block 0# is used by the etc */
 	strcpy(dir_buf[0].d_name, "..");
 	dir_buf[0].d_ino = 1;
-	strcpy(dir_buf[1].d_name, "..");
+	strcpy(dir_buf[1].d_name, ".");
 	dir_buf[1].d_ino = 2;
 	strcpy(dir_buf[2].d_name, "password");
 	dir_buf[2].d_ino = 3;
@@ -89,11 +90,11 @@ void format()
 	/*	2. initialize the superblock */
 	filsys.s_isize = DINODEBLK;
 	filsys.s_fsize = FILEBLK;
-	filsys.s_ninode = DINODEBLK * BLOCKSIZ / DINODESIZ - 4;
+	filsys.s_ninode = DINODEBLK * BLOCKSIZ / DINODESIZ - 4;//4 used block
 	filsys.s_nfree = FILEBLK - 3;
 	for (i = 0; i < NICINOD; i++)
 	{
-		/*	begin with 4, 0,1.2,3, is used by main, etc, password */
+		/*	begin with 4, 0,1,2,3, is used by 0 is empty main, etc, password */
 		filsys.s_inode[i] = 4 + i;
 	}
 	filsys.s_pinode = 0;
@@ -106,11 +107,13 @@ void format()
 	fwrite(block_buf, 1, BLOCKSIZ, fd);
 	for (i = FILEBLK - NICFREE - 1; i > 2; i -= NICFREE)
 	{
-		for (j = 0; j < NICFREE; j++)
+		for (j = 0; j < min(NICFREE, i); j++)
 		{
 			block_buf[j] = i - j;
+			//printf("%d ", block_buf[j]);测试有负数，需要考虑会不会有干扰,min(NICFREE,i)
 		}
-		fseek(fd, DATASTART + BLOCKSIZ * (i - 1), SEEK_SET);
+		//printf("\n");
+		fseek(fd, DATASTART + BLOCKSIZ * (i - 1), SEEK_SET);//组长块位置
 		fwrite(block_buf, 1, BLOCKSIZ, fd);
 	}
 	j = 1;
@@ -122,9 +125,11 @@ void format()
 	filsys.s_pinode = 0;
 	fseek(fd, BLOCKSIZ, SEEK_SET);
 	fwrite(&filsys, 1, sizeof(struct filsys), fd);
+	fclose(fd);
 }
 //for test
-int main()
-{
-	format();
-}
+//int main()
+//{
+//	format();
+//	install();
+//}

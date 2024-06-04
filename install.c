@@ -8,9 +8,11 @@ void install()
 {
 	errno_t err;
 	int i, j;
+	/*struct dir* temp;
+	temp = &dir;*/
 	/*0.open the file column */
-	err = fopen_s(&fd, "File_System", "r+w+b");
-	if (err == 0)
+	err = fopen_s(&fd, "file_system", "rt+");
+	if (err != 0)
 	{
 		fclose(fd);
 		printf("\nfile system file creat failed! \n");
@@ -40,18 +42,26 @@ void install()
 		}
 	}
 	/* 5. read the main directory to initialize the dir */
-	cur_path_inode = iget(1);
-	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);
+	cur_path_inode = iget(1);//main
+	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);//dir.size是main文件中文件的个数
 	for (i = 0; i < DIRNUM; i++)
 	{
 		strcpy(dir.direct[i].d_name, "                 ");
 		dir.direct[i].d_ino = 0;
 	}
-	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2)); i++)
+	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2))-1; i++)
 	{
+		//printf("%d___", DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i]);
 		fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);
 		fread(&dir.direct[(BLOCKSIZ / (DIRSIZ + 2)) * i], 1, BLOCKSIZ, fd);
 	}
+	printf("\n");
 	fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);
-	fread(&dir.direct[(BLOCKSIZ) / (DIRSIZ + 2) * i], 1, cur_path_inode->di_size % BLOCKSIZ, fd);
+	fread(&dir.direct[(BLOCKSIZ) / (DIRSIZ + 2) * i], 1, cur_path_inode->di_size % BLOCKSIZ, fd);//取模得出小于32（一块）的目录
 }
+//for test
+//int main()
+//{
+//	format();
+//	install();
+//}
