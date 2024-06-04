@@ -142,9 +142,11 @@
     <ClInclude Include="filesys.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="access.c" />
     <ClCompile Include="balfree.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="close.c" />
     <ClCompile Include="dir.c" />
     <ClCompile Include="format.c" />
     <ClCompile Include="halt.c" />
@@ -159,7 +161,11 @@
     <ClCompile Include="main.c" />
     <ClCompile Include="name.c" />
     <ClCompile Include="open.c" />
+    <ClCompile Include="rdwt.c" />
     <ClCompile Include="UNIX_COMMEND.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="File_System" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

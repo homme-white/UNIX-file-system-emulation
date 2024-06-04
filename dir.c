@@ -38,7 +38,7 @@ void _dir()	/* _dir */
 	}
 }
 
-void mkdir(dirname)	/* mkdir */
+void mkdir(char *dirname)	/* mkdir */
 {
 
 	int dirid, dirpos;

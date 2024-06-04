@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include "filesys.h"
-close(user_id, cfd)
-unsigned int user_id;
-unsigned short cfd;
+void close(user_id, cfd)
 {
 	struct inode* inode;
 	inode = sys_ofile[user[user_id].u_ofile[cfd]].f_inode;
