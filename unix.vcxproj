@@ -142,6 +142,7 @@
     <ClInclude Include="filesys.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="access.c" />
     <ClCompile Include="balfree.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>

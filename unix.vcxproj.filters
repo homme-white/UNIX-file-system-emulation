@@ -38,6 +38,9 @@
     <ClCompile Include="log.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="access.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="File_System">
