@@ -24,7 +24,7 @@ void main()
 	if (getch() == 'y')
 		printf("\nFormat Will erase all context on the disk \nAre You Sure! (y(es)/n(o)! \n");
 	if (getch() == 'y')*/
-		format();
+	format();
 
 	install();
 
@@ -35,19 +35,19 @@ void main()
 	user_id = 0;
 	mkdir("a2118");
 	chdir("a2118");
-	//ab_fd1 = creat(2118, "ab_file0.c", 01777);
-	//buf = (char*)malloc(BLOCKSIZ * 6 + 5);
-	//awrite(ab_fd1, buf, BLOCKSIZ * 6 + 5);
-	//close(user_id, ab_fd1);
-	//free(buf);
+	ab_fd1 = creat(user_id, "ab_file0.c", 01777);
+	buf = (char*)malloc(BLOCKSIZ * 6 + 5);
+	write(ab_fd1, buf, BLOCKSIZ * 6 + 5);
+	close(user_id, ab_fd1);
+	free(buf);
 
-	//mkdir("subdir");
-	//chdir("subdir");
-	//ab_fd2 = creat(2118, "file1.c", 01777);
-	//buf = (char*)malloc(BLOCKSIZ * 4 + 20);
-	//awrite(ab_fd2, buf, BLOCKSIZ * 4 + 20);
-	//close(user_id, ab_fd2);
-	//free(buf);
+	/*mkdir("subdir");
+	chdir("subdir");
+	ab_fd2 = creat(2118, "file1.c", 01777);
+	buf = (char*)malloc(BLOCKSIZ * 4 + 20);
+	write(ab_fd2, buf, BLOCKSIZ * 4 + 20);
+	close(user_id, ab_fd2);
+	free(buf);*/
 
 	//chdir("..");
 	//ab_fd3 = creat(2118, "_file2.c", 01777);

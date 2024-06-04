@@ -38,9 +38,9 @@ void _dir()	/* _dir */
 	}
 }
 
-void mkdir_file(char* dirname) 
+void mkdir_file(char* dirname)
 {
-	if (dirname != NULL) 
+	if (dirname != NULL)
 	{
 		char* tmp_name = GetFilename(dirname);
 		int dirid;
@@ -54,7 +54,7 @@ void mkdir_file(char* dirname)
 	}
 }
 
-void mkdir(char *dirname)	/* mkdir */
+void mkdir(char* dirname)	/* mkdir */
 {
 
 	int dirid, dirpos;
@@ -147,7 +147,7 @@ void chdir(char* dirname) /* chdir */
 	cur_path_inode->di_size = dir.size * (DIRSIZ + 2);
 	iput(cur_path_inode);
 	cur_path_inode = inode;
-
+	dir.size = inode->di_size / (DIRSIZ + 2);
 	/*	read the change dir from disk */
 	j = 0;
 
