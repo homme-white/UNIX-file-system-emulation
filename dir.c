@@ -85,7 +85,7 @@ void mkdir(char *dirname)	/* mkdir */
 	return;
 }
 
-void chdir(dirname) /* chdir */
+void chdir(char* dirname) /* chdir */
 {
 	unsigned int dirid;
 	struct inode* inode;
