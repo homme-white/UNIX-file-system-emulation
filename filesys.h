@@ -3,24 +3,24 @@
 
 #include <stdio.h>
 
-#define BLOCKSIZ  512  //ÿ���С
-#define SYSOPENFILE 40  //ϵͳ���ļ����������
-#define DIRNUM  128  //ÿ��Ŀ¼�����������Ŀ¼�������ļ�����
-#define DIRSIZ  14  //ÿ��Ŀ¼�����ֲ�����ռ�ֽ���������i�ڵ��2���ֽ�
-#define PWDSIZ   12  //������
-#define PWDNUM   32  //������32�������¼
-#define NOFILE  20  //ÿ���û����ɴ�20���ļ������û����ļ�������
-#define NADDR 10  //ÿ��i�ڵ����ָ��10�飬addr[0]~addr[9]
-#define NADDR_OFF 1	//��������ĸ���
-#define NHINO  128  //��128��Hash�������ṩ����i�ڵ㣨����Ϊ2���ݣ�
-#define USERNUM  10  //�������10���û���¼
-#define DINODESIZ  32 //ÿ������i�ڵ���ռ�ֽ�
-#define DINODEBLK  32  //���д���i�ڵ㹲ռ32��������
-#define FILEBLK  512  //����512��Ŀ¼�ļ�������
-#define NICFREE  50  //�������п��п������������
-#define NICINOD  50  //�������п��нڵ��������
-#define DINODESTART 2*BLOCKSIZ  //i�ڵ���ʼ��ַ
-#define DATASTART (2+DINODEBLK)*BLOCKSIZ //Ŀ¼���ļ�����ʼ��ַ
+#define BLOCKSIZ  512  //每块大小
+#define SYSOPENFILE 40  //系统打开文件表最大项数
+#define DIRNUM  128  //每个目录所包含的最大目录项数（文件数）
+#define DIRSIZ  14  //每个目录项名字部分所占字节数，另加i节点号2个字节
+#define PWDSIZ   12  //口令字
+#define PWDNUM   32  //最多可设32个口令登录
+#define NOFILE  20  //每个用户最多可打开20个文件，即用户打开文件最大次数
+#define NADDR 9  //每个i节点最多指向10块，addr[0]~addr[8]
+#define NADDR_OFFSET 1 
+#define NHINO  128  //共128个Hash链表，提供索引i节点（必须为2的幂）
+#define USERNUM  10  //最多允许10个用户登录
+#define DINODESIZ  32 //每个磁盘i节点所占字节
+#define DINODEBLK  32  //所有磁盘i节点共占32个物理块
+#define FILEBLK  512  //共有512个目录文件物理块
+#define NICFREE  50  //超级块中空闲块数组的最大块数
+#define NICINOD  50  //超级块中空闲节点的最大块数
+#define DINODESTART 2*BLOCKSIZ  //i节点起始地址
+#define DATASTART (2+DINODEBLK)*BLOCKSIZ //目录、文件区起始地址
 #define DIEMPTY     00000
 #define DIFILE      01000
 #define DIDIR       02000
@@ -45,85 +45,83 @@
 #define DISKFULL    65535
 #define SEEK_SET    0
 
-//�ڴ�i�ڵ�
+//内存i节点
 struct inode {
-	struct inode* i_forw;//i�ڵ�ָ��
-	struct inode* i_back;//i�ڵ�ָ��
-	char i_flag;//����i�ڵ��־
-	unsigned int i_ino;//�ڴ�i�ڵ��
-	unsigned int i_count;//���ü���
-	unsigned short di_number;//�����ļ���
-	unsigned short di_mode;//�洢Ȩ��
-	unsigned short di_uid;//�û�id
-	unsigned short di_gid;//�û���id
-	unsigned int di_size;//�ļ���С
-	unsigned short di_addr[NADDR];//����ļ���������
+	struct inode* i_forw;//i节点指针
+	struct inode* i_back;//i节点指针
+	char i_flag;//磁盘i节点标志
+	unsigned int i_ino;//磁盘i节点标志
+	unsigned int i_count;//引用计数
+	unsigned short di_number;//关联文件数
+	unsigned short di_mode;//存储权限
+	unsigned short di_uid;//用户id
+	unsigned short di_gid;//用户组id
+	unsigned int di_size;//文件大小
+	unsigned short di_addr[NADDR + NADDR_OFFSET];//存放文件的物理块
 };
-
-//����i�ڵ�
+//磁盘i节点
 struct dinode {
-	unsigned short di_number;//�����ļ���
-	unsigned short di_mode;//�洢Ȩ��
-	unsigned short di_uid;//�û�id
-	unsigned short di_gid;//�û���id
-	unsigned long di_size;//�ļ���С
-	unsigned short di_addr[NADDR];//����ļ����������
+	unsigned short di_number;//关联文件数
+	unsigned short di_mode;//存储权限
+	unsigned short di_uid;//用户id
+	unsigned short di_gid;//用户组id
+	unsigned long di_size;//文件大小
+	unsigned short di_addr[NADDR + NADDR_OFFSET];//存放文件的物理块号
 };
-
-//Ŀ¼��
+//目录项
 struct direct {
-	char d_name[DIRSIZ];//Ŀ¼����
-	unsigned short d_ino;//ָ��i�ڵ�
+	char d_name[DIRSIZ];//目录名称
+	unsigned short d_ino;//指向i节点
 };
-//������
+//超级块
 struct filsys {//
-	unsigned short s_isize;//i�����ڵ����
-	unsigned long s_fsize;//���ݿ����
-	unsigned int s_nfree;//���п����
-	unsigned short s_pfree;//���п�ָ��
-	unsigned int s_free[NICFREE];//���п��ջ
+	unsigned short s_isize;//i索引节点块数
+	unsigned long s_fsize;//数据块块数
+	unsigned int s_nfree;//空闲块块数
+	unsigned short s_pfree;//空闲块指针
+	unsigned int s_free[NICFREE];//空闲块堆栈
 
-	unsigned int s_ninode;//����i�����ڵ���
-	unsigned short s_pinode;//����i�����ڵ�ָ��
-	unsigned int s_inode[NICINOD];//����i�����ڵ�����
-	unsigned int s_rinode;//����i�����ڵ�
+	unsigned int s_ninode;//空闲i索引节点数
+	unsigned short s_pinode;//空闲i索引节点指针
+	unsigned int s_inode[NICINOD];//空闲i索引节点数组
+	unsigned int s_rinode;//铭记i索引节点
 
-	char s_fmod;//�������޸ı�־
+	char s_fmod;//超级块修改标志
 };
-//�û���¼
+//用户登录
 struct pwd {
-	unsigned short p_uid;//�û�id
-	unsigned short p_gid;//�û���id
+	unsigned short p_uid;//用户id
+	unsigned short p_gid;//用户组id
 	char password[PWDSIZ];//password
 };
-//Ŀ¼��
+//目录表
 struct dir {
-	struct direct direct[DIRNUM];//Ŀ¼�������ʾĿ¼��Ϣ
-	int size;//Ŀ¼�����
+	struct direct direct[DIRNUM];//目录项数组表示目录信息
+	int size;//目录项个数
 };
-//�ڴ�i�ڵ�ͷָ��
+//内存i节点头指针
 struct hinode {
-	struct inode* i_forw;//������Hash��hinode�е�i_forwָ�� 
+	struct inode* i_forw;//队首由Hash表hinode中的i_forw指出 
 };
-//���ļ��ṹ
+//打开文件结构
 struct file {
-	char f_flag;//�ļ�������־
-	unsigned int f_count;//���ü���
-	struct inode* f_inode;//ָ���ڴ�i�ڵ��ָ��
-	unsigned long f_off;//�ļ���дƫ��
+	char f_flag;//文件操作标志
+	unsigned int f_count;//引用计数
+	struct inode* f_inode;//指向内存i节点的指针
+	unsigned long f_off;//文件读写指针
 };
 
 struct user {
-	unsigned short u_default_mode;//�û����
-	unsigned short u_uid;//�û�id
-	unsigned short u_gid;//��id
-	unsigned short u_ofile[NOFILE];//�û����ļ���
+	unsigned short u_default_mode;//用户类别
+	unsigned short u_uid;//用户id
+	unsigned short u_gid;//组id
+	unsigned short u_ofile[NOFILE];//用户打开文件表
 };
 
 struct hinode hinode[NHINO];
-struct dir dir;	//��ǰĿ¼�����ڴ���ȫ�����룩
-struct file sys_ofile[SYSOPENFILE];	//���ļ��ṹ
-struct filsys filsys;	//�ڴ��еĳ�����
+struct dir dir;	//当前目录（在内存中全部读入）
+struct file sys_ofile[SYSOPENFILE];	//打开文件结构
+struct filsys filsys;	//内存中的超级块
 struct pwd pwd[PWDNUM];
 struct user user[USERNUM];
 FILE* fd;
@@ -133,8 +131,8 @@ struct inode* iget(unsigned int dinodeid);
 void iput(struct inode* pinode);
 extern unsigned int balloc();
 extern void  bfree(unsigned int block_num);
-extern struct inode* ialloc();//i�ڵ����
-extern void ifree(unsigned dinodeid);//i�ڵ��ͷ�
+extern struct inode* ialloc();//i节点分配
+extern void ifree(unsigned dinodeid);//i节点释放
 extern unsigned int namei();
 extern unsigned short iname();
 extern unsigned int access();
@@ -151,6 +149,6 @@ void   install();
 void   format();
 extern void   close();
 extern void   halt();
-extern void   delete_f();//ɾ���ļ�����delete_f
-char* GetFilename(char* p);//��ȡ�ļ���
+extern void   delete_f();//删除文件函数delete_f
+char* GetFilename(char* p);//获取文件名
 #endif // !_FILESYS_H_
