@@ -33,7 +33,7 @@ unsigned int balloc()
 void bfree(unsigned int block_num)
 {
 	int i;
-	if (filsys.s_pfree == 0)	/* if s-free full */
+	if (filsys.s_free == 0)	/* if s-free full */
 	{
 		block_buf[NICFREE] = NICFREE;
 		for (i = 0; i < NICFREE; i++)
