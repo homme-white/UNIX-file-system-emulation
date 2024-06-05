@@ -68,6 +68,9 @@
     <ClCompile Include="create.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="block_addr.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="File_System" />

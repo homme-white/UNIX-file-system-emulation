@@ -6,8 +6,6 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 	unsigned int di_ith, di_ino;
 	struct inode* inode;
 	int i, j;
-	unsigned int buf;
-	unsigned short num = inode->di_size / BLOCKSIZ + 1;
 	di_ino = namei(filename);  // ???
 	if (di_ino != NULL)	/* already existed */
 	{
@@ -19,22 +17,10 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 			return -1;
 		}
 		/* free all the block of the old file */
-		//当文件需要偏移时候（由于只有一次间接寻址）
-		if (num > NADDR) //先判断是否需要间接寻址
-		{
-			for (i = 0; i < num - NADDR; i++)
-			{
-				fseek(fd, DATASTART + inode->di_addr[NADDR + NADDR_OFF - 1] * BLOCKSIZ + i, SEEK_SET);//找到对应的便宜位置
-				fread(buf, 1, sizeof(unsigned int), fd);//读出块号
-				bfree(buf);
-			}
-		}
-		
-		for (i = 0; i < min(NADDR, num); i++)
+		for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
 		{
 			bfree(inode->di_addr[i]);
 		}
-		
 
 		/* to do: add code here to update the pointer of the sys_file */
 		for (i = 0; i < SYSOPENFILE; i++)

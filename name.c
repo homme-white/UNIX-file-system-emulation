@@ -7,8 +7,8 @@ unsigned int namei(char* name) /* namei查找名为name的文件 */
 	int i, notfound = 1;
 	for (i = 0; ((i < dir.size) && (notfound)); i++)
 	{
-		if ((!strcmp(dir.direct[i].d_name, name)) && (dir.direct[1].d_ino != 0))
-			return i;   /* find */
+		if ((!strcmp(dir.direct[i].d_name, name)) && (dir.direct[i].d_ino != 0))
+			return dir.direct[i].d_ino;   /* find */
 	}
 	/* notfind */
 	return NULL;

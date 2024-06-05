@@ -36,7 +36,7 @@ struct inode* iget(unsigned int dinodeid)    /* iget( ) */
 	/* 4.put it into hinode[inodeid] queue */
 	newinode->i_forw = hinode[inodeid].i_forw;
 	newinode->i_back = newinode;
-	if(newinode->i_forw!=NULL)
+	if (newinode->i_forw != NULL)
 		newinode->i_forw->i_back = newinode;
 	hinode[inodeid].i_forw = newinode;
 	/* 5.initialize the inode */
@@ -69,11 +69,6 @@ void iput(struct inode* pinode) /* iput ( ) */
 		{
 			/*	rm the node & the block of the file in the disk */
 			block_num = pinode->di_size / BLOCKSIZ;
-			if(block_num>NADDR+NADDR)
-			if (block_num > NADDR) 
-			{
-
-			}
 			for (i = 0; i < block_num; i++)
 			{
 				pinode->di_addr[i] = balloc();
