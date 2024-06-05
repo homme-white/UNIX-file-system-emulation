@@ -146,6 +146,7 @@
     <ClCompile Include="balfree.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="block_addr.c" />
     <ClCompile Include="close.c" />
     <ClCompile Include="create.c" />
     <ClCompile Include="delete.c" />

@@ -3,23 +3,24 @@
 
 #include <stdio.h>
 
-#define BLOCKSIZ  512  //Ã¿¿é´óÐ¡
-#define SYSOPENFILE 40  //ÏµÍ³´ò¿ªÎÄ¼þ±í×î´óÏîÊý
-#define DIRNUM  128  //Ã¿¸öÄ¿Â¼Ëù°üº¬µÄ×î´óÄ¿Â¼ÏîÊý£¨ÎÄ¼þÊý£©
-#define DIRSIZ  14  //Ã¿¸öÄ¿Â¼ÏîÃû×Ö²¿·ÖËùÕ¼×Ö½ÚÊý£¬Áí¼Ói½ÚµãºÅ2¸ö×Ö½Ú
-#define PWDSIZ   12  //¿ÚÁî×Ö
-#define PWDNUM   32  //×î¶à¿ÉÉè32¸ö¿ÚÁîµÇÂ¼
-#define NOFILE  20  //Ã¿¸öÓÃ»§×î¶à¿É´ò¿ª20¸öÎÄ¼þ£¬¼´ÓÃ»§´ò¿ªÎÄ¼þ×î´ó´ÎÊý
-#define NADDR 10  //Ã¿¸öi½Úµã×î¶àÖ¸Ïò10¿é£¬addr[0]~addr[9]
-#define NHINO  128  //¹²128¸öHashÁ´±í£¬Ìá¹©Ë÷Òýi½Úµã£¨±ØÐëÎª2µÄÃÝ£©
-#define USERNUM  10  //×î¶àÔÊÐí10¸öÓÃ»§µÇÂ¼
-#define DINODESIZ  32 //Ã¿¸ö´ÅÅÌi½ÚµãËùÕ¼×Ö½Ú
-#define DINODEBLK  32  //ËùÓÐ´ÅÅÌi½Úµã¹²Õ¼32¸öÎïÀí¿é
-#define FILEBLK  512  //¹²ÓÐ512¸öÄ¿Â¼ÎÄ¼þÎïÀí¿é
-#define NICFREE  50  //³¬¼¶¿éÖÐ¿ÕÏÐ¿éÊý×éµÄ×î´ó¿éÊý
-#define NICINOD  50  //³¬¼¶¿éÖÐ¿ÕÏÐ½ÚµãµÄ×î´ó¿éÊý
-#define DINODESTART 2*BLOCKSIZ  //i½ÚµãÆðÊ¼µØÖ·
-#define DATASTART (2+DINODEBLK)*BLOCKSIZ //Ä¿Â¼¡¢ÎÄ¼þÇøÆðÊ¼µØÖ·
+#define BLOCKSIZ  512  //Ã¿ï¿½ï¿½ï¿½Ð¡
+#define SYSOPENFILE 40  //ÏµÍ³ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define DIRNUM  128  //Ã¿ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+#define DIRSIZ  14  //Ã¿ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ö²ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½Úµï¿½ï¿½2ï¿½ï¿½ï¿½Ö½ï¿½
+#define PWDSIZ   12  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define PWDNUM   32  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½32ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼
+#define NOFILE  20  //Ã¿ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½É´ï¿½20ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define NADDR 10  //Ã¿ï¿½ï¿½iï¿½Úµï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½10ï¿½é£¬addr[0]~addr[9]
+#define NADDR_OFF 1	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½
+#define NHINO  128  //ï¿½ï¿½128ï¿½ï¿½Hashï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¹©ï¿½ï¿½ï¿½ï¿½iï¿½Úµã£¨ï¿½ï¿½ï¿½ï¿½Îª2ï¿½ï¿½ï¿½Ý£ï¿½
+#define USERNUM  10  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Â¼
+#define DINODESIZ  32 //Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½Úµï¿½ï¿½ï¿½Õ¼ï¿½Ö½ï¿½
+#define DINODEBLK  32  //ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½iï¿½Úµã¹²Õ¼32ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define FILEBLK  512  //ï¿½ï¿½ï¿½ï¿½512ï¿½ï¿½Ä¿Â¼ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define NICFREE  50  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define NICINOD  50  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Ð½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define DINODESTART 2*BLOCKSIZ  //iï¿½Úµï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ö·
+#define DATASTART (2+DINODEBLK)*BLOCKSIZ //Ä¿Â¼ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ö·
 #define DIEMPTY     00000
 #define DIFILE      01000
 #define DIDIR       02000
@@ -44,83 +45,85 @@
 #define DISKFULL    65535
 #define SEEK_SET    0
 
-//ÄÚ´æi½Úµã
+//ï¿½Ú´ï¿½iï¿½Úµï¿½
 struct inode {
-	struct inode* i_forw;//i½ÚµãÖ¸Õë
-	struct inode* i_back;//i½ÚµãÖ¸Õë
-	char i_flag;//´ÅÅÌi½Úµã±êÖ¾
-	unsigned int i_ino;//´ÅÅÌi½Úµã±êÖ¾
-	unsigned int i_count;//ÒýÓÃ¼ÆÊý
-	unsigned short di_number;//¹ØÁªÎÄ¼þÊý
-	unsigned short di_mode;//´æ´¢È¨ÏÞ
-	unsigned short di_uid;//ÓÃ»§id
-	unsigned short di_gid;//ÓÃ»§×éid
-	unsigned int di_size;//ÎÄ¼þ´óÐ¡
-	unsigned short di_addr[NADDR];//´æ·ÅÎÄ¼þµÄÎïÀí¿é
+	struct inode* i_forw;//iï¿½Úµï¿½Ö¸ï¿½ï¿½
+	struct inode* i_back;//iï¿½Úµï¿½Ö¸ï¿½ï¿½
+	char i_flag;//ï¿½ï¿½ï¿½ï¿½iï¿½Úµï¿½ï¿½Ö¾
+	unsigned int i_ino;//ï¿½Ú´ï¿½iï¿½Úµï¿½ï¿½
+	unsigned int i_count;//ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½
+	unsigned short di_number;//ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+	unsigned short di_mode;//ï¿½æ´¢È¨ï¿½ï¿½
+	unsigned short di_uid;//ï¿½Ã»ï¿½id
+	unsigned short di_gid;//ï¿½Ã»ï¿½ï¿½ï¿½id
+	unsigned int di_size;//ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡
+	unsigned short di_addr[NADDR];//ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 };
-//´ÅÅÌi½Úµã
+
+//ï¿½ï¿½ï¿½ï¿½iï¿½Úµï¿½
 struct dinode {
-	unsigned short di_number;//¹ØÁªÎÄ¼þÊý
-	unsigned short di_mode;//´æ´¢È¨ÏÞ
-	unsigned short di_uid;//ÓÃ»§id
-	unsigned short di_gid;//ÓÃ»§×éid
-	unsigned long di_size;//ÎÄ¼þ´óÐ¡
-	unsigned short di_addr[NADDR];//´æ·ÅÎÄ¼þµÄÎïÀí¿éºÅ
+	unsigned short di_number;//ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+	unsigned short di_mode;//ï¿½æ´¢È¨ï¿½ï¿½
+	unsigned short di_uid;//ï¿½Ã»ï¿½id
+	unsigned short di_gid;//ï¿½Ã»ï¿½ï¿½ï¿½id
+	unsigned long di_size;//ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡
+	unsigned short di_addr[NADDR];//ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 };
-//Ä¿Â¼Ïî
+
+//Ä¿Â¼ï¿½ï¿½
 struct direct {
-	char d_name[DIRSIZ];//Ä¿Â¼Ãû³Æ
-	unsigned short d_ino;//Ö¸Ïòi½Úµã
+	char d_name[DIRSIZ];//Ä¿Â¼ï¿½ï¿½ï¿½ï¿½
+	unsigned short d_ino;//Ö¸ï¿½ï¿½iï¿½Úµï¿½
 };
-//³¬¼¶¿é
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 struct filsys {//
-	unsigned short s_isize;//iË÷Òý½Úµã¿éÊý
-	unsigned long s_fsize;//Êý¾Ý¿é¿éÊý
-	unsigned int s_nfree;//¿ÕÏÐ¿é¿éÊý
-	unsigned short s_pfree;//¿ÕÏÐ¿éÖ¸Õë
-	unsigned int s_free[NICFREE];//¿ÕÏÐ¿é¶ÑÕ»
+	unsigned short s_isize;//iï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½
+	unsigned long s_fsize;//ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½
+	unsigned int s_nfree;//ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½ï¿½ï¿½
+	unsigned short s_pfree;//ï¿½ï¿½ï¿½Ð¿ï¿½Ö¸ï¿½ï¿½
+	unsigned int s_free[NICFREE];//ï¿½ï¿½ï¿½Ð¿ï¿½ï¿½Õ»
 
-	unsigned int s_ninode;//¿ÕÏÐiË÷Òý½ÚµãÊý
-	unsigned short s_pinode;//¿ÕÏÐiË÷Òý½ÚµãÖ¸Õë
-	unsigned int s_inode[NICINOD];//¿ÕÏÐiË÷Òý½ÚµãÊý×é
-	unsigned int s_rinode;//Ãú¼ÇiË÷Òý½Úµã
+	unsigned int s_ninode;//ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½
+	unsigned short s_pinode;//ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Ö¸ï¿½ï¿½
+	unsigned int s_inode[NICINOD];//ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½
+	unsigned int s_rinode;//ï¿½ï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½
 
-	char s_fmod;//³¬¼¶¿éÐÞ¸Ä±êÖ¾
+	char s_fmod;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸Ä±ï¿½Ö¾
 };
-//ÓÃ»§µÇÂ¼
+//ï¿½Ã»ï¿½ï¿½ï¿½Â¼
 struct pwd {
-	unsigned short p_uid;//ÓÃ»§id
-	unsigned short p_gid;//ÓÃ»§×éid
+	unsigned short p_uid;//ï¿½Ã»ï¿½id
+	unsigned short p_gid;//ï¿½Ã»ï¿½ï¿½ï¿½id
 	char password[PWDSIZ];//password
 };
-//Ä¿Â¼±í
+//Ä¿Â¼ï¿½ï¿½
 struct dir {
-	struct direct direct[DIRNUM];//Ä¿Â¼ÏîÊý×é±íÊ¾Ä¿Â¼ÐÅÏ¢
-	int size;//Ä¿Â¼Ïî¸öÊý
+	struct direct direct[DIRNUM];//Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ä¿Â¼ï¿½ï¿½Ï¢
+	int size;//Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
 };
-//ÄÚ´æi½ÚµãÍ·Ö¸Õë
+//ï¿½Ú´ï¿½iï¿½Úµï¿½Í·Ö¸ï¿½ï¿½
 struct hinode {
-	struct inode* i_forw;//¶ÓÊ×ÓÉHash±íhinodeÖÐµÄi_forwÖ¸³ö 
+	struct inode* i_forw;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Hashï¿½ï¿½hinodeï¿½Ðµï¿½i_forwÖ¸ï¿½ï¿½ 
 };
-//´ò¿ªÎÄ¼þ½á¹¹
+//ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½á¹¹
 struct file {
-	char f_flag;//ÎÄ¼þ²Ù×÷±êÖ¾
-	unsigned int f_count;//ÒýÓÃ¼ÆÊý
-	struct inode* f_inode;//Ö¸ÏòÄÚ´æi½ÚµãµÄÖ¸Õë
-	unsigned long f_off;//ÎÄ¼þ¶ÁÐ´Ö¸Õë
+	char f_flag;//ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+	unsigned int f_count;//ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½
+	struct inode* f_inode;//Ö¸ï¿½ï¿½ï¿½Ú´ï¿½iï¿½Úµï¿½ï¿½Ö¸ï¿½ï¿½
+	unsigned long f_off;//ï¿½Ä¼ï¿½ï¿½ï¿½Ð´Æ«ï¿½ï¿½
 };
 
 struct user {
-	unsigned short u_default_mode;//ÓÃ»§Àà±ð
-	unsigned short u_uid;//ÓÃ»§id
-	unsigned short u_gid;//×éid
-	unsigned short u_ofile[NOFILE];//ÓÃ»§´ò¿ªÎÄ¼þ±í
+	unsigned short u_default_mode;//ï¿½Ã»ï¿½ï¿½ï¿½ï¿½
+	unsigned short u_uid;//ï¿½Ã»ï¿½id
+	unsigned short u_gid;//ï¿½ï¿½id
+	unsigned short u_ofile[NOFILE];//ï¿½Ã»ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 };
 
 struct hinode hinode[NHINO];
-struct dir dir;	//µ±Ç°Ä¿Â¼£¨ÔÚÄÚ´æÖÐÈ«²¿¶ÁÈë£©
-struct file sys_ofile[SYSOPENFILE];	//´ò¿ªÎÄ¼þ½á¹¹
-struct filsys filsys;	//ÄÚ´æÖÐµÄ³¬¼¶¿é
+struct dir dir;	//ï¿½ï¿½Ç°Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ë£©
+struct file sys_ofile[SYSOPENFILE];	//ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½á¹¹
+struct filsys filsys;	//ï¿½Ú´ï¿½ï¿½ÐµÄ³ï¿½ï¿½ï¿½ï¿½ï¿½
 struct pwd pwd[PWDNUM];
 struct user user[USERNUM];
 FILE* fd;
@@ -130,8 +133,8 @@ struct inode* iget(unsigned int dinodeid);
 void iput(struct inode* pinode);
 extern unsigned int balloc();
 extern void  bfree(unsigned int block_num);
-extern struct inode* ialloc();//i½Úµã·ÖÅä
-extern void ifree(unsigned dinodeid);//i½ÚµãÊÍ·Å
+extern struct inode* ialloc();//iï¿½Úµï¿½ï¿½ï¿½ï¿½
+extern void ifree(unsigned dinodeid);//iï¿½Úµï¿½ï¿½Í·ï¿½
 extern unsigned int namei();
 extern unsigned short iname();
 extern unsigned int access();
@@ -148,6 +151,6 @@ void   install();
 void   format();
 extern void   close();
 extern void   halt();
-extern void   delete_f();//É¾³ýÎÄ¼þº¯Êýdelete_f
-char* GetFilename(char* p);//»ñÈ¡ÎÄ¼þÃû
+extern void   delete_f();//É¾ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½delete_f
+char* GetFilename(char* p);//ï¿½ï¿½È¡ï¿½Ä¼ï¿½ï¿½ï¿½
 #endif // !_FILESYS_H_
