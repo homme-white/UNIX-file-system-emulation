@@ -11,16 +11,16 @@ void install()
 	/*struct dir* temp;
 	temp = &dir;*/
 	/*0.open the file column */
-	err = fopen_s(&fd, "file_system", "rt+");
+	/*err = fopen_s(&fd, "file_system", "rt+");
 	if (err != 0)
 	{
 		fclose(fd);
 		printf("\nfile system file creat failed! \n");
-	}
+	}*/
 	/*	1. read the filsys from the superblock */
 	fseek(fd, BLOCKSIZ, SEEK_SET);
 	fread(&filsys, 1, sizeof(struct filsys), fd);
-	/*	2. initialize the mode hash chain */
+	/*	2. initialize the inode hash chain */
 	for (i = 0; i < NHINO; i++)
 	{
 		hinode[i].i_forw = NULL;
@@ -49,7 +49,7 @@ void install()
 		strcpy(dir.direct[i].d_name, "                 ");
 		dir.direct[i].d_ino = 0;
 	}
-	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2))-1; i++)
+	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2)) - 1; i++)
 	{
 		//printf("%d___", DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i]);
 		fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);

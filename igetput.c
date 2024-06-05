@@ -24,7 +24,7 @@ struct inode* iget(unsigned int dinodeid)    /* iget( ) */
 			}
 			else    /*not existed */
 				temp = temp->i_forw;
-		};
+		}
 	}
 	/*	1. calculate the addr of the dinode in the file sys column */
 	addr = DINODESTART + dinodeid * DINODESIZ;
@@ -36,13 +36,17 @@ struct inode* iget(unsigned int dinodeid)    /* iget( ) */
 	/* 4.put it into hinode[inodeid] queue */
 	newinode->i_forw = hinode[inodeid].i_forw;
 	newinode->i_back = newinode;
-	if(newinode->i_forw!=NULL)
+	if (newinode->i_forw != NULL)
 		newinode->i_forw->i_back = newinode;
 	hinode[inodeid].i_forw = newinode;
 	/* 5.initialize the inode */
 	newinode->i_count = 1;
 	newinode->i_flag = 0;    /* flag for not update */
 	newinode->i_ino = dinodeid;
+
+	newinode->di_size = 3 * (DIRSIZ + 2);
+	if (dinodeid == 3)
+		newinode->di_size = BLOCKSIZ;
 	return newinode;
 }
 
@@ -83,6 +87,6 @@ void iput(struct inode* pinode) /* iput ( ) */
 			pinode->i_forw->i_back = pinode->i_back;
 			pinode->i_back->i_forw = pinode->i_forw;
 		};
-		free(pinode);
+		ifree(pinode);
 	};
 }

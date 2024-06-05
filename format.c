@@ -63,7 +63,7 @@ void format()
 	inode->di_number = 1;
 	inode->di_mode = DEFAULTMODE | DIDIR;
 	inode->di_size = 3 * (DIRSIZ + 2);
-	inode->di_addr[0] = 0;    /* block 0# is used by the etc */
+	inode->di_addr[0] = 1;    /* block 0# is used by the etc */
 	strcpy(dir_buf[0].d_name, "..");
 	dir_buf[0].d_ino = 1;
 	strcpy(dir_buf[1].d_name, ".");
@@ -75,7 +75,7 @@ void format()
 	iput(inode);
 	inode = iget(3);    /* 3 password id */
 	inode->di_number = 1;
-	inode->di_mode = DEFAULTMODE | DIFILE;
+	inode->di_mode = DEFAULTMODE | DIDIR;
 	inode->di_size = BLOCKSIZ;
 	inode->di_addr[0] = 2;
 	for (i = 5; i < PWDNUM; i++)
@@ -122,13 +122,13 @@ void format()
 	{
 		filsys.s_free[NICFREE - 1 + i - j] = i;
 	}
-	filsys.s_pfree = NICFREE - 1 -j + 3;
+	filsys.s_pfree = NICFREE - 1 - j + 3;
 	filsys.s_pinode = 0;
 	fseek(fd, BLOCKSIZ, SEEK_SET);
-	fwrite(&filsys, 1, sizeof(struct filsys), fd);
-	//fseek(fd, BLOCKSIZ, SEEK_SET);
-	//fread(&filsys.s_isize, 1, sizeof(struct filsys), fd);
-	fclose(fd);
+	fwrite(&filsys, 1, sizeof(filsys), fd);
+	fseek(fd, BLOCKSIZ, SEEK_SET);
+	fread(&filsys.s_isize, 1, sizeof(filsys), fd);
+	/*fclose(fd);*/
 }
 //for test
 //int main()

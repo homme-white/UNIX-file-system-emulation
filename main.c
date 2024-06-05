@@ -46,6 +46,7 @@ void main()
 	mkdir("subdir");
 	chdir("subdir");
 	ab_fd2 = creat(user_id, "file1.c", 01777);
+	file_block = BLOCKSIZ * 4 + 20;
 	buf = (char*)malloc(BLOCKSIZ * 4 + 20);
 	write(ab_fd2, buf, BLOCKSIZ * 4 + 20);
 	close(user_id, ab_fd2);
@@ -53,9 +54,10 @@ void main()
 
 	chdir("..");
 	ab_fd3 = creat(user_id, "_file2.c", 01777);
+	file_block = BLOCKSIZ * 3 + 255;
 	buf = (char*)malloc(BLOCKSIZ * 10 + 255);
 	write(ab_fd3, buf, BLOCKSIZ * 3 + 255);
-	close(ab_fd3);
+	close(user_id, ab_fd3);
 	free(buf);
 
 	_dir();

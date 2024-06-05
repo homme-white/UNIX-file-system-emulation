@@ -5,7 +5,7 @@
 #include "filesys.h"
 void _dir()	/* _dir */
 {
-	unsigned int di_mode;
+	unsigned short int di_mode;
 	int i, one;
 	struct inode* temp_inode;
 	printf("\nCURRENT DIRECTORY ..\n");
@@ -28,11 +28,11 @@ void _dir()	/* _dir */
 				if (one) printf("x");
 				else printf("-");
 			}
-			if (temp_inode->di_mode && DIFILE == 1)
+			if (temp_inode->di_mode && DIFILE)
 			{
 				printf("%ld\n", temp_inode->di_size);
 				printf("block chain:");
-				for (i = 0; i < temp_inode->di_size / BLOCKSIZ + 1; i++)
+				for (int k = 0; k < temp_inode->di_size / BLOCKSIZ + 1; k++)
 					printf("%4d", temp_inode->di_addr[i]);
 				printf("\n");
 			}
@@ -130,7 +130,7 @@ void chdir(char* dirname) /* chdir */
 	{
 		for (j = 0; j < DIRNUM; j++)
 			if (dir.direct[j].d_ino == 0) break;
-		memcpy(&dir.direct[i], &dir.direct[j], DIRSIZ + 2);
+		memcpy(&dir.direct[j], &dir.direct[i], DIRSIZ + 2);
 		dir.direct[j].d_ino = 0;
 	}
 
@@ -147,7 +147,7 @@ void chdir(char* dirname) /* chdir */
 		block = balloc();
 		cur_path_inode->di_addr[i] = block;
 		fseek(fd, DATASTART + block * BLOCKSIZ, SEEK_SET);
-		fwrite(&dir.direct[j], 1, BLOCKSIZ, fd);
+		fwrite(&dir.direct[0], 1, BLOCKSIZ, fd);
 	}
 	cur_path_inode->di_size = dir.size * (DIRSIZ + 2);
 	iput(cur_path_inode);
@@ -161,7 +161,7 @@ void chdir(char* dirname) /* chdir */
 		fseek(fd, DATASTART + inode->di_addr[i] * BLOCKSIZ, SEEK_SET);
 		fread(&dir.direct[0], 1, BLOCKSIZ, fd);
 		j += BLOCKSIZ / (DIRSIZ + 2);
-	};
+	}
 
 	return;
 }

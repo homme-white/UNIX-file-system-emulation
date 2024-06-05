@@ -55,8 +55,8 @@ struct inode {
 	unsigned short di_mode;//存储权限
 	unsigned short di_uid;//用户id
 	unsigned short di_gid;//用户组id
-	unsigned short di_size;//文件大小
-	unsigned int di_addr[NADDR];//存放文件的物理块
+	unsigned int di_size;//文件大小
+	unsigned short di_addr[NADDR];//存放文件的物理块
 };
 //磁盘i节点
 struct dinode {
@@ -65,7 +65,7 @@ struct dinode {
 	unsigned short di_uid;//用户id
 	unsigned short di_gid;//用户组id
 	unsigned long di_size;//文件大小
-	unsigned int di_addr[NADDR];//存放文件的物理块号
+	unsigned short di_addr[NADDR];//存放文件的物理块号
 };
 //目录项
 struct direct {

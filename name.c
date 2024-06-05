@@ -17,6 +17,7 @@ unsigned int namei(char* name) /* namei查找名为name的文件 */
 
 unsigned short iname(char* name)	/* iname */
 {
+	struct dir temp = dir;
 	int i, notfound = 1;
 	for (i = 0; ((i < DIRNUM) && (notfound)); i++)
 	{
