@@ -125,9 +125,9 @@ void format()
 	filsys.s_pfree = NICFREE - 1 - j + 3;
 	filsys.s_pinode = 0;
 	fseek(fd, BLOCKSIZ, SEEK_SET);
-	fwrite(&filsys, 1, sizeof(filsys), fd);
+	fwrite(&filsys, 1, sizeof(struct filsys), fd);
 	fseek(fd, BLOCKSIZ, SEEK_SET);
-	fread(&filsys.s_isize, 1, sizeof(filsys), fd);
+	fread(&filsys.s_isize, 1, sizeof(struct filsys), fd);
 	/*fclose(fd);*/
 }
 //for test

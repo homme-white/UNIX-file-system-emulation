@@ -20,6 +20,13 @@ void main()
 	unsigned short ab_fd1, ab_fd2, ab_fd3, ab_fd4;
 	unsigned short bhy_fd1;
 	char* buf;
+	struct hinode* temp1 = hinode;
+struct dir *tmp2 = &dir;
+struct file *tmp3 = sys_ofile;
+struct filsys *tmp4 = &filsys;
+struct pwd * tmp5 = pwd;
+struct user*tmp6 = user;
+struct inode* tmp7 = &cur_path_inode;
 
 	/*printf("\nDo you want to format the disk \n");
 	if (getch() == 'y')

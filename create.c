@@ -10,7 +10,7 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 	if (di_ino != NULL)	/* already existed */
 	{
 		inode = iget(di_ino);
-		if (access(user_id, inode, inode) == 0)
+		if (access(user_id, inode, mode) == 0)
 		{
 			iput(inode);
 			printf("\rcreat access not allowed \n");
@@ -49,7 +49,7 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 		dir.size++;
 
 		dir.direct[di_ith].d_ino = inode->i_ino;
-
+		dir.direct[di_ith + 1].d_ino = 0;
 		inode->di_mode = user[user_id].u_default_mode | DIFILE;
 		inode->di_uid = user[user_id].u_uid;
 		inode->di_gid = user[user_id].u_gid;

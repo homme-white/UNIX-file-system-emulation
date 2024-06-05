@@ -9,7 +9,7 @@ int block_address(struct inode* inode, unsigned int block_num)//输入节点和第几个
 	{
 		return inode->di_addr[block_num];
 	}
-	else if (block_num < NADDR + (BLOCKSIZ / sizeof(unsigned int)) * 1 && NADDR_OFF >= 1)//一层间接索引
+	else if (block_num < NADDR + (BLOCKSIZ / sizeof(unsigned int)) * 1 && NADDR_OFFSET >= 1)//一层间接索引
 	{
 		fseek(fd, DATASTART + inode->di_addr[NADDR + 1 - 1] * BLOCKSIZ + block_num - NADDR, SEEK_SET);//找到对应的便宜位置
 		fread(buf, 1, sizeof(unsigned int), fd);//读出块号

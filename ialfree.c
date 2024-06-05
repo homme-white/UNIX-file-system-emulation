@@ -1,9 +1,9 @@
 /* i节点分配与释放函数*/
 #include <stdio.h>
 #include "filesys.h"
-static struct dinode block_buf[BLOCKSIZ / DINODESIZ];
 struct inode* ialloc()
 {
+	struct dinode block_buf[BLOCKSIZ / DINODESIZ];
 	struct inode* temp_inode;
 	unsigned int cur_di;
 	int i, count, block_end_flag;
