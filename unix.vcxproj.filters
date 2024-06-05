@@ -50,6 +50,21 @@
     <ClCompile Include="access.c">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="close.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dir.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="open.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rdwt.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="File_System" />

@@ -49,7 +49,7 @@ struct inode {
 	struct inode* i_forw;//i节点指针
 	struct inode* i_back;//i节点指针
 	char i_flag;//磁盘i节点标志
-	unsigned int i_ino;//磁盘i节点标志
+	unsigned int i_ino;//内存i节点号
 	unsigned int i_count;//引用计数
 	unsigned short di_number;//关联文件数
 	unsigned short di_mode;//存储权限
@@ -57,7 +57,9 @@ struct inode {
 	unsigned short di_gid;//用户组id
 	unsigned short di_size;//文件大小
 	unsigned int di_addr[NADDR];//存放文件的物理块
+	struct offset_inode* di_addr_offset//一次间接索引
 };
+
 //磁盘i节点
 struct dinode {
 	unsigned short di_number;//关联文件数
@@ -66,6 +68,12 @@ struct dinode {
 	unsigned short di_gid;//用户组id
 	unsigned long di_size;//文件大小
 	unsigned int di_addr[NADDR];//存放文件的物理块号
+	struct offset_inode* di_addr_offset;
+};
+
+//间接索引
+struct offset_inode {
+	unsigned int blocks[NADDR];
 };
 //目录项
 struct direct {
@@ -107,7 +115,7 @@ struct file {
 	char f_flag;//文件操作标志
 	unsigned int f_count;//引用计数
 	struct inode* f_inode;//指向内存i节点的指针
-	unsigned long f_off;//文件读写指针
+	unsigned long f_off;//文件读写偏移
 };
 
 struct user {
