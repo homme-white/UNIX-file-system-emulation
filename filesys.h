@@ -11,6 +11,7 @@
 #define PWDNUM   32  //最多可设32个口令登录
 #define NOFILE  20  //每个用户最多可打开20个文件，即用户打开文件最大次数
 #define NADDR 10  //每个i节点最多指向10块，addr[0]~addr[9]
+#define NADDR_OFF 1	//间接索引的个数
 #define NHINO  128  //共128个Hash链表，提供索引i节点（必须为2的幂）
 #define USERNUM  10  //最多允许10个用户登录
 #define DINODESIZ  32 //每个磁盘i节点所占字节
@@ -56,8 +57,8 @@ struct inode {
 	unsigned short di_uid;//用户id
 	unsigned short di_gid;//用户组id
 	unsigned short di_size;//文件大小
-	unsigned int di_addr[NADDR];//存放文件的物理块
-	struct offset_inode* di_addr_offset//一次间接索引
+	unsigned int di_addr[NADDR + NADDR_OFF];//存放文件的物理块
+	
 };
 
 //磁盘i节点
@@ -67,14 +68,9 @@ struct dinode {
 	unsigned short di_uid;//用户id
 	unsigned short di_gid;//用户组id
 	unsigned long di_size;//文件大小
-	unsigned int di_addr[NADDR];//存放文件的物理块号
-	struct offset_inode* di_addr_offset;
+	unsigned int di_addr[NADDR + NADDR_OFF];//存放文件的物理块号
 };
 
-//间接索引
-struct offset_inode {
-	unsigned int blocks[NADDR];
-};
 //目录项
 struct direct {
 	char d_name[DIRSIZ];//目录名称

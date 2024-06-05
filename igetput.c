@@ -69,6 +69,11 @@ void iput(struct inode* pinode) /* iput ( ) */
 		{
 			/*	rm the node & the block of the file in the disk */
 			block_num = pinode->di_size / BLOCKSIZ;
+			if(block_num>NADDR+NADDR)
+			if (block_num > NADDR) 
+			{
+
+			}
 			for (i = 0; i < block_num; i++)
 			{
 				pinode->di_addr[i] = balloc();
