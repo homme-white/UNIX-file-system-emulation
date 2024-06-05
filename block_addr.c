@@ -5,7 +5,7 @@ int block_address(struct inode* inode, unsigned int block_num)//输入节点和第几个
 {
 	int i, j;
 	unsigned int buf;
-	if (block_num < NADDR) 
+	if (block_num < NADDR)
 	{
 		return inode->di_addr[block_num];
 	}

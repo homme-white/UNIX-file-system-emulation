@@ -190,7 +190,7 @@ unsigned int write(int fdu, char* buf, unsigned int size) {
 	}
 	// 按块写入数据，并为新块分配存储空间
 	for (i = 0; i < (size - k * (BLOCKSIZ - block_off)) / BLOCKSIZ; i++) {
-		inode->di_addr[block + 1 + i] = balloc();
+		inode->di_addr[block + k + i] = balloc();
 		fseek(fd, DATASTART + inode->di_addr[block + k + i] * BLOCKSIZ, SEEK_SET);
 		fwrite(temp_buf, 1, BLOCKSIZ, fd);
 		temp_buf += BLOCKSIZ;

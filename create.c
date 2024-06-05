@@ -14,7 +14,7 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 		{
 			iput(inode);
 			printf("\rcreat access not allowed \n");
-			return -1;
+			return;
 		}
 		/* free all the block of the old file */
 		for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)

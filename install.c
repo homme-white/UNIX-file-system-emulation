@@ -11,12 +11,12 @@ void install()
 	/*struct dir* temp;
 	temp = &dir;*/
 	/*0.open the file column */
-	/*err = fopen_s(&fd, "file_system", "rt+");
+	err = fopen_s(&fd, "file_system", "rb+");
 	if (err != 0)
 	{
 		fclose(fd);
 		printf("\nfile system file creat failed! \n");
-	}*/
+	}
 	/*	1. read the filsys from the superblock */
 	fseek(fd, BLOCKSIZ, SEEK_SET);
 	fread(&filsys, 1, sizeof(struct filsys), fd);

@@ -49,7 +49,7 @@
 struct inode {
 	struct inode* i_forw;//i节点指针
 	struct inode* i_back;//i节点指针
-	char i_flag;//磁盘i节点标志
+	unsigned short i_flag;//磁盘i节点标志
 	unsigned int i_ino;//磁盘i节点标志
 	unsigned int i_count;//引用计数
 	unsigned short di_number;//关联文件数
@@ -105,7 +105,7 @@ struct hinode {
 };
 //打开文件结构
 struct file {
-	char f_flag;//文件操作标志
+	unsigned short f_flag;//文件操作标志
 	unsigned int f_count;//引用计数
 	struct inode* f_inode;//指向内存i节点的指针
 	unsigned long f_off;//文件读写指针

@@ -15,7 +15,7 @@ void format()
 	int i, j;
 	errno_t err;
 	//Create File_system file
-	err = fopen_s(&fd, "File_System", "wt+");
+	err = fopen_s(&fd, "File_System", "wb+");
 	if (err != 0)
 	{
 		fclose(fd);
@@ -128,7 +128,7 @@ void format()
 	fwrite(&filsys, 1, sizeof(struct filsys), fd);
 	fseek(fd, BLOCKSIZ, SEEK_SET);
 	fread(&filsys.s_isize, 1, sizeof(struct filsys), fd);
-	/*fclose(fd);*/
+	fclose(fd);
 }
 //for test
 //int main()

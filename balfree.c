@@ -17,7 +17,7 @@ unsigned int balloc()
 	if (filsys.s_pfree == NICFREE - 1)
 	{
 		fseek(fd, DATASTART + (BLOCKSIZ + NICFREE - filsys.s_nfree) * BLOCKSIZ, SEEK_SET);
-		fread(block_buf, 1, BLOCKSIZ * 2, fd);
+		printf("%d",fread(block_buf, 1, BLOCKSIZ, fd));
 		free_block_num = block_buf[NICFREE];
 		for (i = 0; i < free_block_num; i++)
 		{
@@ -38,7 +38,7 @@ void bfree(unsigned int block_num)
 {
 	unsigned int block_buf[BLOCKSIZ];
 	int i;
-	if (filsys.s_pfree == 0)	/* if s-free full */
+	if (filsys.s_free == 0)	/* if s-free full */
 	{
 		block_buf[NICFREE] = NICFREE;
 		for (i = 0; i < NICFREE; i++)
