@@ -50,11 +50,11 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 
 		dir.direct[di_ith].d_ino = inode->i_ino;
 
-		inode->di_mode = user[user_id].u_default_mode;
+		inode->di_mode = user[user_id].u_default_mode | DIFILE;
 		inode->di_uid = user[user_id].u_uid;
 		inode->di_gid = user[user_id].u_gid;
-		inode->di_size = 0;
-		inode->di_number = 0;
+		inode->di_size = file_block;
+		inode->di_number = 1;
 
 		for (i = 0; i < SYSOPENFILE; i++)
 			if (sys_ofile[i].f_count == 0)
@@ -74,5 +74,4 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 		sys_ofile[i].f_inode = inode;
 		return j;
 	}
-	return -1;  //????
-}
+}

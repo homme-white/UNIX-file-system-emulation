@@ -125,7 +125,7 @@ struct pwd pwd[PWDNUM];
 struct user user[USERNUM];
 FILE* fd;
 struct inode* cur_path_inode;
-int    user_id;
+int    user_id, file_block;
 struct inode* iget(unsigned int dinodeid);
 void iput(struct inode* pinode);
 extern unsigned int balloc();

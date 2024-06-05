@@ -13,6 +13,7 @@
 //FILE* fd;
 //struct inode* cur_path_inode;
 //int user_id;
+//int file_block;
 
 void main()
 {
@@ -36,6 +37,7 @@ void main()
 	mkdir("a2118");
 	chdir("a2118");
 	ab_fd1 = creat(user_id, "ab_file0.c", 01777);
+	file_block = BLOCKSIZ * 6 + 5;
 	buf = (char*)malloc(BLOCKSIZ * 6 + 5);
 	write(ab_fd1, buf, BLOCKSIZ * 6 + 5);
 	close(user_id, ab_fd1);

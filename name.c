@@ -4,11 +4,12 @@
 #include "filesys.h"
 unsigned int namei(char* name) /* namei查找名为name的文件 */
 {
+	struct dir temp = dir;
 	int i, notfound = 1;
 	for (i = 0; ((i < dir.size) && (notfound)); i++)
 	{
-		if ((!strcmp(dir.direct[i].d_name, name)) && (dir.direct[1].d_ino != 0))
-			return i;   /* find */
+		if ((!strcmp(dir.direct[i].d_name, name)) && (dir.direct[i].d_ino != 0))
+			return dir.direct[i].d_ino;   /* find */
 	}
 	/* notfind */
 	return NULL;
@@ -33,6 +34,7 @@ unsigned short iname(char* name)	/* iname */
 	else
 	{
 		strcpy(dir.direct[i].d_name, name);
+		dir.direct[i].d_ino = 1;
 		return i;
 	}
 }
