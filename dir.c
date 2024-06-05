@@ -38,6 +38,22 @@ void _dir()	/* _dir */
 	}
 }
 
+void mkdir_file(char* dirname) 
+{
+	if (dirname != NULL) 
+	{
+		char* tmp_name = GetFilename(dirname);
+		int dirid;
+		mkdir_file(dirname);
+		mkdir(tmp_name);
+		chdir(tmp_name);
+	}
+	else
+	{
+		return;
+	}
+}
+
 void mkdir(char *dirname)	/* mkdir */
 {
 

@@ -142,7 +142,7 @@ extern unsigned short aopen();
 extern void   creat();
 extern unsigned int read();
 extern unsigned int write();
-extern int    login();
+int    login();
 int  logout();
 void   install(); 
 void   format();

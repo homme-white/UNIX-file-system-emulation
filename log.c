@@ -6,13 +6,13 @@
 int login(unsigned short uid, char* passwd)//µÇÂ¼
 {
 	int i, j;
-	struct pwd tmp;
+	//struct pwd tmp;
 	char name[PWDSIZ];
-	fseek(fd, DATASTART + 2 * BLOCKSIZ, SEEK_SET);
-	fread(&pwd[0], 1, BLOCKSIZ, fd);
+	//fseek(fd, DATASTART + 2 * BLOCKSIZ, SEEK_SET);
+	//fread(&pwd[0], 1, BLOCKSIZ, fd);
 	for (i = 0; i < PWDNUM; i++)
 	{
-		tmp = pwd[i];
+		//tmp = pwd[i];
 		strcpy(name, passwd);
 		if ((uid == pwd[i].p_uid) && ~(strcmp(passwd, name)))
 		{
@@ -67,4 +67,33 @@ int logout(unsigned short uid)//µÇ³ö
 		}
 	}
 	return 1;
+}
+
+int regist()
+{
+	int i; //empty_pwd
+	struct pwd passwd[PWDNUM];
+	unsigned short passwd_uid;
+	unsigned short passwd_gid;
+
+	for (i = 0; i < PWDNUM; i++) {
+		if (pwd[i].p_uid == 0 && pwd[i].p_gid == 0) 
+		{
+			break;
+		}
+	}
+	if (i == PWDNUM) {
+		//printf(); full
+		return 0;
+	}
+	//printf(); ÊäÈë
+	scanf("%d", &passwd_uid);
+	scanf("%d", &passwd_gid);
+	scanf("%s", passwd);
+
+	passwd[i].p_uid = passwd_uid;
+	passwd[i].p_gid = passwd_gid;
+	strcpy(passwd[i].password, passwd);
+	//passwd[0].p_uid = 2116; passwd[0].p_gid = 03;
+	//strcpy(passwd[0].password, "dddd");
 }
