@@ -148,6 +148,7 @@
     </ClCompile>
     <ClCompile Include="close.c" />
     <ClCompile Include="create.c" />
+    <ClCompile Include="delete.c" />
     <ClCompile Include="dir.c" />
     <ClCompile Include="format.c" />
     <ClCompile Include="halt.c" />
