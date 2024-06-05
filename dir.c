@@ -17,6 +17,10 @@ void _dir()	/* _dir */
 			printf("%DIRSIZs", dir.direct[i].d_name);
 			temp_inode = iget(dir.direct[i].d_ino);
 			di_mode = temp_inode->di_mode;
+			if (temp_inode->di_mode & DIFILE)
+				printf("f");
+			else
+				printf("d");
 			for (int j = 0; j < 9; j++)
 			{
 				one = di_mode % 2;
@@ -32,7 +36,7 @@ void _dir()	/* _dir */
 					printf("%4d", temp_inode->di_addr[i]);
 				printf("\n");
 			}
-			else printf("<dir>\n");
+			else printf("<dir>block chain:%d\n", dir.direct[i].d_ino);
 			iput(temp_inode);
 		}
 	}
@@ -80,7 +84,7 @@ void mkdir(char* dirname)	/* mkdir */
 
 	dirpos = iname(dirname);
 	inode = ialloc();
-	inode->i_ino = dirid;
+	dirid = inode->i_ino;
 	dir.direct[dirpos].d_ino = inode->i_ino;
 	dir.size++;
 	/*	fill the new dir buf */
@@ -88,12 +92,13 @@ void mkdir(char* dirname)	/* mkdir */
 	buf[0].d_ino = dirid;
 	strcpy(buf[1].d_name, "..");
 	buf[1].d_ino = cur_path_inode->i_ino;
+	buf[2].d_ino = 0;
 	block = balloc();
 	fseek(fd, DATASTART + block * BLOCKSIZ, SEEK_SET);
 	fwrite(buf, 1, BLOCKSIZ, fd);
 	inode->di_size = 2 * (DIRSIZ + 2);
 	inode->di_number = 1;
-	inode->di_mode = user[user_id].u_default_mode;
+	inode->di_mode = user[user_id].u_default_mode | DIDIR;
 	inode->di_uid = user[user_id].u_uid;
 	inode->di_gid = user[user_id].u_gid;
 	inode->di_addr[0] = block;
@@ -154,7 +159,7 @@ void chdir(char* dirname) /* chdir */
 	for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
 	{
 		fseek(fd, DATASTART + inode->di_addr[i] * BLOCKSIZ, SEEK_SET);
-		fread(&dir.direct[j], 1, BLOCKSIZ, fd);
+		fread(&dir.direct[0], 1, BLOCKSIZ, fd);
 		j += BLOCKSIZ / (DIRSIZ + 2);
 	};
 
