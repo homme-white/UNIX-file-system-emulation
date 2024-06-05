@@ -153,23 +153,23 @@ unsigned int read(int fd, char* buf, unsigned int size) {
 }
 
 // 写文件内容
-unsigned int write(int fd, char* buf, unsigned int size) {
+unsigned int write(int fdu, char* buf, unsigned int size) {
 	unsigned long off; // 文件偏移量
 	int block, block_off, i;
 	struct inode* inode;
 	char* temp_buf;
 
 	// 获取文件的inode节点
-	inode = sys_ofile[user[user_id].u_ofile[fd]].f_inode;
+	inode = sys_ofile[user[user_id].u_ofile[fdu]].f_inode;
 
 	// 检查文件是否以写方式打开
-	if (!(sys_ofile[user[user_id].u_ofile[fd]].f_flag & FWRITE)) {
+	if (!(sys_ofile[user[user_id].u_ofile[fdu]].f_flag & FWRITE)) {
 		printf("\n the file is not opened for write\n");
 		return 0;
 	}
 
 	// 获取当前文件偏移量
-	off = sys_ofile[user[user_id].u_ofile[fd]].f_off;
+	off = sys_ofile[user[user_id].u_ofile[fdu]].f_off;
 	block_off = off % BLOCKSIZ; // 块内偏移
 	block = off / BLOCKSIZ; // 当前块号
 
@@ -179,7 +179,7 @@ unsigned int write(int fd, char* buf, unsigned int size) {
 	if (block_off + size < BLOCKSIZ) {
 		fseek(fd, DATASTART + inode->di_addr[block] * BLOCKSIZ + block_off, SEEK_SET);
 		fwrite(buf, 1, size, fd);
-		sys_ofile[user[user_id].u_ofile[fd]].f_off += size; // 更新文件偏移量
+		sys_ofile[user[user_id].u_ofile[fdu]].f_off += size; // 更新文件偏移量
 		return size;
 	}
 
@@ -209,6 +209,6 @@ unsigned int write(int fd, char* buf, unsigned int size) {
 		fwrite(temp_buf, 1, (size - (BLOCKSIZ - block_off)) % BLOCKSIZ, fd);
 	}
 
-	sys_ofile[user[user_id].u_ofile[fd]].f_off += size; // 更新文件偏移量
+	sys_ofile[user[user_id].u_ofile[fdu]].f_off += size; // 更新文件偏移量
 	return size;
 }
