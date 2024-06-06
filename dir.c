@@ -9,6 +9,7 @@ void _dir()	/* _dir */
 	int i, one;
 	struct inode* temp_inode;
 	printf("\nCURRENT DIRECTORY:dir.size=%d\n", dir.size);
+	printf("%d", dir.size);
 	for (i = 0; i < dir.size; i++)
 	{
 		//printf("%d", dir.size);
@@ -85,7 +86,7 @@ void mkdir(char* dirname)	/* mkdir */
 	dirpos = iname(dirname);
 	inode = ialloc();
 	dirid = inode->i_ino;
-	dir.direct[dirpos].d_ino = inode->i_ino;
+	dir.direct[dirpos].d_ino = dirid;
 	dir.direct[dirpos + 1].d_ino = 0;
 	dir.size++;
 	/*	fill the new dir buf */
@@ -103,6 +104,7 @@ void mkdir(char* dirname)	/* mkdir */
 	inode->di_uid = user[user_id].u_uid;
 	inode->di_gid = user[user_id].u_gid;
 	inode->di_addr[0] = block;
+
 	iput(inode);
 	return;
 }
@@ -112,6 +114,7 @@ void chdir(char* dirname) /* chdir */
 	unsigned int dirid;
 	struct inode* inode;
 	unsigned short block;
+	struct dir* temp = &dir;
 	int i, j, low = 0, high = 0;
 	dirid = namei(dirname);
 	if (dirid == NULL)
@@ -129,13 +132,29 @@ void chdir(char* dirname) /* chdir */
 	/* pack the current directory */
 	for (i = 0; i < dir.size; i++)
 	{
-		for (j = i + 1; j < DIRNUM; j++)
-			if (dir.direct[j].d_ino != 0)
-				break;
-		memcpy(&dir.direct[i], &dir.direct[j], DIRSIZ + 2);
-		dir.direct[j].d_ino = 0;
-
+		//ÔøΩÔøΩÔøΩÔøΩÔøΩ«∞ƒø¬ºÔøΩÔøΩ√ªÔøΩÔøΩ πÔøΩÔøΩ
+		if (dir.direct[i].d_ino == 0)
+		{
+			//ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ–±ÔøΩ πÔøΩ√µÔøΩƒø¬ºÔøΩÓ£¨ÔøΩÔøΩƒø¬ºÔøΩÔøΩ€∫ÔøΩÔøΩÔøΩ“ªÔøΩÔøΩ
+			for (j = i + 1; j < DIRNUM; j++)//?
+				if (dir.direct[j].d_ino == 0)
+					break;
+			memcpy(&dir.direct[i], &dir.direct[j], DIRSIZ + 2);
+			dir.direct[j].d_ino = 0;
+		}
 	}
+	//for (i = 0; i < dir.size; i++)
+	//{
+	//	for (j = 0; j < DIRNUM; j++) {
+	//		if (dir.direct[j].d_ino == 0)
+	//		{
+	//			break;
+	//		}
+	//	}
+	//	memcpy(&dir.direct[j], &dir.direct[i], DIRSIZ + 2);
+	//	dir.direct[j].d_ino = 0;
+
+	//}
 
 	/*	write back the current directory */
 
@@ -147,16 +166,10 @@ void chdir(char* dirname) /* chdir */
 	for (i = 0, j = 0; i < dir.size; i += BLOCKSIZ / (DIRSIZ + 2), j++)
 	{
 
-		//∑÷≈‰“ª∏ˆ¥≈≈ÃøÈ£¨»›ƒ…32∏ˆƒø¬º
-		block = balloc();
-		//Ω´ƒø¬º∑÷≈‰µΩ’‚∏ˆ¥≈≈ÃøÈ…œ¥Ê¥¢
+		block = balloc();//?
 		cur_path_inode->di_addr[j] = block;
-		//∂®ŒªµΩ∏√ø’œ–¥≈≈Ã¥¶
 		fseek(fd, DATASTART + block * BLOCKSIZ, SEEK_SET);
-		//Ω´dir.direct[j]µƒƒ⁄»›–¥»ÎµΩ∏√ø’œ–¥≈≈Ã¥¶
-		//Ω´ƒø¬º÷–µƒ◊„πª∂‡µƒfcb–≈œ¢÷ÿ–¬–¥»Î¥≈≈Ã
-		//’‚¿Ôfwriteø…“‘æ°¡ø–¥∂‡
-		fwrite(&dir.direct[j], BLOCKSIZ, 1, fd);
+		fwrite(&dir.direct[j], 1, BLOCKSIZ, fd);
 	}
 	cur_path_inode->di_size = dir.size * (DIRSIZ + 2);
 	iput(cur_path_inode);
@@ -164,13 +177,12 @@ void chdir(char* dirname) /* chdir */
 	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);
 	/*	read the change dir from disk */
 
-
-	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + (inode->di_size % BLOCKSIZ != 0); i++, j += BLOCKSIZ / (DIRSIZ + 2))
+	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + (inode->di_size % BLOCKSIZ != 0); i++)
 	{
-		//∂¡»°–¬µƒƒø¬º ˝æ›øÈ
+		//ÔøΩÔøΩ»°ÔøΩ¬µÔøΩƒø¬ºÔøΩÔøΩÔøΩ›øÔøΩ
 		fseek(fd, DATASTART + inode->di_addr[i] * BLOCKSIZ, SEEK_SET);
-		//∂¡»°fcbµΩdir
-		fread(&dir.direct[j], BLOCKSIZ, 1, fd);
+		fread(&dir.direct[j], 1, BLOCKSIZ, fd);
+		j += BLOCKSIZ / (DIRSIZ + 2);
 	}
 
 	return;

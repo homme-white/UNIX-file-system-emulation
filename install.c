@@ -8,10 +8,10 @@ void install()
 {
 	errno_t err;
 	int i, j;
-	/*struct dir* temp;
-	temp = &dir;*/
+	struct dir* temp;
+	temp = &dir;
 	/*0.open the file column */
-	err = fopen_s(&fd, "file_system", "rb+");
+	err = fopen_s(&fd, "file_system", "r+b");
 	if (err != 0)
 	{
 		fclose(fd);
@@ -43,13 +43,13 @@ void install()
 	}
 	/* 5. read the main directory to initialize the dir */
 	cur_path_inode = iget(1);//main
-	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);//dir.size是main文件中文件的个数
 	for (i = 0; i < DIRNUM; i++)
 	{
 		strcpy(dir.direct[i].d_name, "                 ");
 		dir.direct[i].d_ino = 0;
 	}
-	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2)) - 1; i++)
+	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);//dir.size是main文件中文件的个数
+	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2)); i++)
 	{
 		//printf("%d___", DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i]);
 		fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);

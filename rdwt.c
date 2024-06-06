@@ -80,7 +80,7 @@ unsigned int write(int fdu, char* buf, unsigned int size) {
 	// 获取当前文件偏移量
 	off = sys_ofile[user[user_id].u_ofile[fdu]].f_off;
 	block_off = off % BLOCKSIZ; // 块内偏移
-	block = off / BLOCKSIZ; // 当前块号
+	block = off / BLOCKSIZ; 
 
 	// 如果写入内容跨越不到一个块
 	if (block_off + size < BLOCKSIZ) {

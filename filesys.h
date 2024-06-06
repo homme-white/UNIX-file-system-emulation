@@ -49,7 +49,7 @@
 struct inode {
 	struct inode* i_forw;//i节点指针
 	struct inode* i_back;//i节点指针
-	unsigned short i_flag;//磁盘i节点标志
+	char i_flag;//磁盘i节点标志
 	unsigned int i_ino;//磁盘i节点标志
 	unsigned int i_count;//引用计数
 	unsigned short di_number;//关联文件数
@@ -137,17 +137,17 @@ extern unsigned int namei();
 extern unsigned short iname();
 extern unsigned int access();
 extern void   _dir();
-extern void   mkdir();
-extern void   chdir();
+void   mkdir();
+void   chdir();
 extern unsigned short aopen();
-extern int   creat();
+int   creat();
 extern unsigned int read();
 extern unsigned int write();
 int    login();
 int  logout();
 void   install();
 void   format();
-extern void   close();
+void   close();
 extern void   halt();
 extern void   delete_f();//删除文件函数delete_f
 char* GetFilename(char* p);//获取文件名
