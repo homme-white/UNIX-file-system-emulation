@@ -1,7 +1,7 @@
 /*open.c*/
 #include <stdio.h>
 #include "filesys.h"
-unsigned short aopen(user_id, filename, openmode)
+unsigned short aopen(int user_id, char* filename, unsigned short openmode)
 {
 	unsigned int dinodeid;
 	struct inode* inode;
@@ -20,8 +20,10 @@ unsigned short aopen(user_id, filename, openmode)
 		return NULL;
 	}
 	/* alloc the sys-ofile item */
-	for (i = 1; i < SYSOPENFILE; i++)
+	for (i = 0; i < SYSOPENFILE; i++)
+	{
 		if (sys_ofile[i].f_count == 0) break;
+	}
 	if (i == SYSOPENFILE)
 	{
 		printf("\nsystem open file too much\n");
@@ -37,7 +39,7 @@ unsigned short aopen(user_id, filename, openmode)
 		sys_ofile[i].f_off = 0;
 	/* alloc the user open file item */
 	for (j = 0; j < NOFILE; j++)
-		if (user[user_id].u_ofile[j] == 0) break;
+		if (user[user_id].u_ofile[j] == SYSOPENFILE + 1) break;
 	if (j == NOFILE)
 	{
 		printf("\nuser open file too much!!! \n");
@@ -45,9 +47,9 @@ unsigned short aopen(user_id, filename, openmode)
 		iput(inode);
 		return NULL;
 	}
-	user[user_id].u_ofile[j] = 1;
+	user[user_id].u_ofile[j] = i;//?
 	/*if APPEND, free the block of the file before */
-	if (openmode & FAPPEND)
+	if (!(openmode & FAPPEND))
 	{
 		for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
 			bfree(inode->di_addr[i]);
