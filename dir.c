@@ -86,6 +86,7 @@ void mkdir(char* dirname)	/* mkdir */
 	inode = ialloc();
 	dirid = inode->i_ino;
 	dir.direct[dirpos].d_ino = inode->i_ino;
+	dir.direct[dirpos + 1].d_ino = 0;
 	dir.size++;
 	/*	fill the new dir buf */
 	strcpy(buf[0].d_name, ".");
