@@ -21,12 +21,12 @@ void main()
 	unsigned short bhy_fd1;
 	char* buf;
 	struct hinode* temp1 = hinode;
-	struct dir* tmp2 = &dir;
-	struct file* tmp3 = sys_ofile;
-	struct filsys* tmp4 = &filsys;
-	struct pwd* tmp5 = pwd;
-	struct user* tmp6 = user;
-	struct inode* tmp7 = &cur_path_inode;
+struct dir *tmp2 = &dir;
+struct file *tmp3 = &sys_ofile[0];
+struct filsys *tmp4 = &filsys;
+struct pwd * tmp5 = pwd;
+struct user*tmp6 = user;
+struct inode* tmp7 = &cur_path_inode;
 
 	printf("\nDo you want to format the disk \n");
 	if (getch() == 'y')
@@ -71,9 +71,9 @@ void main()
 
 	_dir();
 	delete_f("ab_file0.c");
-	ab_fd4 = creat(user_id, "file3.c", 01777);
-	buf = (char*)malloc(BLOCKSIZ * 8 + 300);
-	write(ab_fd4, buf, BLOCKSIZ * 8 + 300);
+	ab_fd4 = creat(user_id, "ab_file3.c", 01777);
+	buf = (char*)malloc(BLOCKSIZ * 7 + 300);
+	write(ab_fd4, buf, BLOCKSIZ * 7 + 300);
 	close(user_id, ab_fd4);
 	free(buf);
 

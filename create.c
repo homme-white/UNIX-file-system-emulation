@@ -69,7 +69,7 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 			}
 		user[user_id].u_ofile[j] = i;
 		sys_ofile[i].f_flag = mode;
-		sys_ofile[i].f_count = 1;
+		sys_ofile[i].f_count = 1;//?
 		sys_ofile[i].f_off = 0;
 		sys_ofile[i].f_inode = inode;
 		return j;

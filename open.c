@@ -20,8 +20,10 @@ unsigned short aopen(int user_id, char* filename, unsigned short openmode)
 		return NULL;
 	}
 	/* alloc the sys-ofile item */
-	for (i = 1; i < SYSOPENFILE; i++)
+	for (i = 0; i < SYSOPENFILE; i++)
+	{
 		if (sys_ofile[i].f_count == 0) break;
+	}
 	if (i == SYSOPENFILE)
 	{
 		printf("\nsystem open file too much\n");
@@ -45,7 +47,7 @@ unsigned short aopen(int user_id, char* filename, unsigned short openmode)
 		iput(inode);
 		return NULL;
 	}
-	user[user_id].u_ofile[j] = i;
+	user[user_id].u_ofile[j] = i;//?
 	/*if APPEND, free the block of the file before */
 	if (!(openmode & FAPPEND))
 	{
