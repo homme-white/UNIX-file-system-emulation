@@ -46,7 +46,7 @@ void main()
 	format();
 
 	install();
-	strcpy(tprecord, "»¶Ó­Ê¹ÓÃUtopian²Ù×÷ÏµÍ³\nÇëÑ¡ÔñÄúĞèÒªµÄ²Ù×÷£º1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt\nroot@UtopianUnix:~/root&");
+	strcpy(tprecord, "ï¿½ï¿½Ó­Ê¹ï¿½ï¿½Utopianï¿½ï¿½ï¿½ï¿½ÏµÍ³\nï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt\nroot@UtopianUnix:~/root&");
 
 	printf("\nCommand : dir  \n");
 	_dir();
@@ -55,19 +55,19 @@ void main()
 	online = 1;
 	do {
 		printf("%s ", tprecord);
-		//fgets(cmd, sizeof(cmd), stdin); // »ñÈ¡ÊäÈëµÄÃüÁî
-		scanf("%d", &cmd);//»ñÈ¡ÊäÈëµÄÃüÁî
+		//fgets(cmd, sizeof(cmd), stdin); // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		scanf("%d", &cmd);//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		switch (cmd)
 		{
-		case 1:printf("\nÇëÊäÈëÎÄ¼ş¼ĞÃû\n");
+		case 1:printf("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½\n");
 			scanf("%s", cmd_buff);
 			mkdir(cmd_buff);
 			break;
-		case 2:printf("\nÇëÊäÈëÎÄ¼ş¼ĞÃû\n");
+		case 2:printf("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½\n");
 			scanf("%s", cmd_buff);
 			chdir(cmd_buff);
 			break;
-		case 3:printf("\nÇëÊäÈëÎÄ¼şÃû\n");
+		case 3:printf("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½\n");
 			scanf("%s", cmd_buff);
 			open[size] = creat(user_id, cmd_buff, 01777);
 			file_block = BLOCKSIZ * 6 + 5;
@@ -78,7 +78,7 @@ void main()
 			strcpy(list[size], cmd_buff);
 			size++;
 			break;
-		case 4:printf("\nÇëÊäÈëÎÄ¼şÃû\n");
+		case 4:printf("\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½\n");
 			scanf("%s", cmd_buff);
 			delete_f(cmd_buff);
 			break;
