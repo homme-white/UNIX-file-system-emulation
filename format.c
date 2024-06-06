@@ -50,8 +50,10 @@ void format()
 	inode->di_mode = DEFAULTMODE | DIDIR;
 	inode->di_size = 3 * (DIRSIZ + 2);
 	inode->di_addr[0] = 0;    /* block 0# is used by the main directory */
-
-
+	strcpy(dir_buf[0].d_name, "..");
+	dir_buf[0].d_ino = 1;
+	strcpy(dir_buf[1].d_name, ".");
+	dir_buf[1].d_ino = 1;
 	strcpy(dir_buf[2].d_name, "etc");
 	dir_buf[2].d_ino = 2;
 	fseek(fd, DATASTART, SEEK_SET);
