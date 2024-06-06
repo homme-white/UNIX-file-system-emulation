@@ -20,72 +20,124 @@ void main()
 	unsigned short ab_fd1, ab_fd2, ab_fd3, ab_fd4;
 	unsigned short bhy_fd1;
 	char* buf;
-	struct hinode* temp1 = hinode;
-struct dir *tmp2 = &dir;
-struct file *tmp3 = &sys_ofile[0];
-struct filsys *tmp4 = &filsys;
-struct pwd * tmp5 = pwd;
-struct user*tmp6 = user;
-struct inode* tmp7 = &cur_path_inode;
+	char tprecord[1000] = "";
+	int cmd = 0;
+	char cmd_buff[1000] = "";
+	int size = 0;
+	int n = 0;
+	int* open = (int*)malloc(n * sizeof(int));
+	char list[10][20] = { "" };
+	int online = 0;
 
-	printf("\nDo you want to format the disk \n");
+	struct hinode* temp1 = hinode;
+	struct dir* tmp2 = &dir;
+	struct file* tmp3 = &sys_ofile[0];
+	struct filsys* tmp4 = &filsys;
+	struct pwd* tmp5 = pwd;
+	struct user* tmp6 = user;
+	struct inode* tmp7 = &cur_path_inode;
+
+	/*printf("\nDo you want to format the disk \n");
 	if (getch() == 'y')
 	{
 		printf("\nFormat Will erase all context on the disk \nAre You Sure! (y(es)/n(o)! \n");
 	}
-	if (getch() == 'y')
-		format();
+	if (getch() == 'y')*/
+	format();
 
 	install();
+	strcpy(tprecord, "欢迎使用Utopian操作系统\n请选择您需要的操作：1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt\nroot@UtopianUnix:~/root&");
 
 	printf("\nCommand : dir  \n");
 	_dir();
 
 	login(2118, "abcd");
-	user_id = 0;
-	mkdir("a2118");
-	chdir("a2118");
-	ab_fd1 = creat(user_id, "ab_file0.c", 01777);
-	file_block = BLOCKSIZ * 6 + 5;
-	buf = (char*)malloc(BLOCKSIZ * 6 + 5);
-	write(ab_fd1, buf, BLOCKSIZ * 6 + 5);
-	close(user_id, ab_fd1);
-	free(buf);
-
-	mkdir("subdir");
-	chdir("subdir");
-	ab_fd2 = creat(user_id, "file1.c", 01777);
-	file_block = BLOCKSIZ * 4 + 20;
-	buf = (char*)malloc(BLOCKSIZ * 4 + 20);
-	write(ab_fd2, buf, BLOCKSIZ * 4 + 20);
-	close(user_id, ab_fd2);
-	free(buf);
-
-	chdir("..");
-	ab_fd3 = creat(user_id, "ab_file2.c", 01777);
-	file_block = BLOCKSIZ * 3 + 255;
-	buf = (char*)malloc(BLOCKSIZ * 10 + 255);
-	write(ab_fd3, buf, BLOCKSIZ * 3 + 255);
-	close(user_id, ab_fd3);
-	free(buf);
-
-	_dir();
-	delete_f("ab_file0.c");
-	ab_fd4 = creat(user_id, "ab_file3.c", 01777);
-	buf = (char*)malloc(BLOCKSIZ * 7 + 300);
-	write(ab_fd4, buf, BLOCKSIZ * 7 + 300);
-	close(user_id, ab_fd4);
-	free(buf);
-
-	_dir();
-	ab_fd3 = aopen(user_id, "file2.c", FAPPEND);
-	buf = (char*)malloc(BLOCKSIZ * 3 + 100);
-	write(ab_fd3, buf, BLOCKSIZ * 3 + 100);
-	close(user_id, ab_fd3);
-	free(buf);
-
-	_dir();
-	chdir("..");
-	logout(2118);
-	halt();
+	online = 1;
+	do {
+		printf("%s ", tprecord);
+		//fgets(cmd, sizeof(cmd), stdin); // 获取输入的命令
+		scanf("%d", &cmd);//获取输入的命令
+		switch (cmd)
+		{
+		case 1:printf("\n请输入文件夹名\n");
+			scanf("%s", cmd_buff);
+			mkdir(cmd_buff);
+			break;
+		case 2:printf("\n请输入文件夹名\n");
+			scanf("%s", cmd_buff);
+			chdir(cmd_buff);
+			break;
+		case 3:printf("\n请输入文件名\n");
+			scanf("%s", cmd_buff);
+			open[size] = creat(user_id, cmd_buff, 01777);
+			file_block = BLOCKSIZ * 6 + 5;
+			buf = (char*)malloc(BLOCKSIZ * 6 + 5);
+			write(open[size], buf, BLOCKSIZ * 6 + 5);
+			close(user_id, open[size]);
+			free(buf);
+			strcpy(list[size], cmd_buff);
+			size++;
+			break;
+		case 4:printf("\n请输入文件名\n");
+			scanf("%s", cmd_buff);
+			delete_f(cmd_buff);
+			break;
+		case 5:
+			_dir();
+			break;
+		case 0:
+			online = -1;
+			logout(2118);
+			halt();
+		}
+	} while (online = 1);
+	return;
 }
+
+/*user_id = 0;
+mkdir("a2118");
+chdir("a2118");
+ab_fd1 = creat(user_id, "ab_file0.c", 01777);
+file_block = BLOCKSIZ * 6 + 5;
+buf = (char*)malloc(BLOCKSIZ * 6 + 5);
+write(ab_fd1, buf, BLOCKSIZ * 6 + 5);
+close(user_id, ab_fd1);
+free(buf);
+
+mkdir("subdir");
+chdir("subdir");
+ab_fd2 = creat(user_id, "file1.c", 01777);
+file_block = BLOCKSIZ * 4 + 20;
+buf = (char*)malloc(BLOCKSIZ * 4 + 20);
+write(ab_fd2, buf, BLOCKSIZ * 4 + 20);
+close(user_id, ab_fd2);
+free(buf);
+
+chdir("..");
+ab_fd3 = creat(user_id, "ab_file2.c", 01777);
+file_block = BLOCKSIZ * 3 + 255;
+buf = (char*)malloc(BLOCKSIZ * 10 + 255);
+write(ab_fd3, buf, BLOCKSIZ * 3 + 255);
+close(user_id, ab_fd3);
+free(buf);
+
+_dir();
+delete_f("ab_file0.c");
+ab_fd4 = creat(user_id, "ab_file3.c", 01777);
+buf = (char*)malloc(BLOCKSIZ * 7 + 300);
+write(ab_fd4, buf, BLOCKSIZ * 7 + 300);
+close(user_id, ab_fd4);
+free(buf);
+
+_dir();
+ab_fd3 = aopen(user_id, "file2.c", FAPPEND);
+buf = (char*)malloc(BLOCKSIZ * 3 + 100);
+write(ab_fd3, buf, BLOCKSIZ * 3 + 100);
+close(user_id, ab_fd3);
+free(buf);
+
+_dir();
+chdir("..");
+logout(2118);
+halt();
+}*/
