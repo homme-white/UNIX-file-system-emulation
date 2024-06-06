@@ -85,7 +85,7 @@ void iput(struct inode* pinode) /* iput ( ) */
 		else {
 			pinode->i_forw->i_back = pinode->i_back;
 			pinode->i_back->i_forw = pinode->i_forw;
-		};
+		}
 		free(pinode);
-	};
+	}
 }

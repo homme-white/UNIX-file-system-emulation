@@ -85,7 +85,7 @@ void mkdir(char* dirname)	/* mkdir */
 	dirpos = iname(dirname);
 	inode = ialloc();
 	dirid = inode->i_ino;
-	dir.direct[dirpos].d_ino = inode->i_ino;
+	dir.direct[dirpos].d_ino = dirid;
 	dir.direct[dirpos + 1].d_ino = 0;
 	dir.size++;
 	/*	fill the new dir buf */
@@ -143,13 +143,13 @@ void chdir(char* dirname) /* chdir */
 		bfree(cur_path_inode->di_addr[i]);
 	}
 
-	for (i = 0; i < dir.size; i += BLOCKSIZ / (DIRSIZ + 2))
+	for (i = 0, j = 0; i < dir.size; i += BLOCKSIZ / (DIRSIZ + 2), j++)
 	{
 
-		block = balloc();
-		cur_path_inode->di_addr[i] = block;
+		block = balloc();//?
+		cur_path_inode->di_addr[j] = block;
 		fseek(fd, DATASTART + block * BLOCKSIZ, SEEK_SET);
-		fwrite(&dir.direct[0], 1, BLOCKSIZ, fd);
+		fwrite(&dir.direct[j], 1, BLOCKSIZ, fd);
 	}
 	cur_path_inode->di_size = dir.size * (DIRSIZ + 2);
 	iput(cur_path_inode);
@@ -158,10 +158,10 @@ void chdir(char* dirname) /* chdir */
 	/*	read the change dir from disk */
 	
 
-	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
+	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + (inode->di_size % BLOCKSIZ != 0); i++)
 	{
 		fseek(fd, DATASTART + inode->di_addr[i] * BLOCKSIZ, SEEK_SET);
-		fread(&dir.direct[0], 1, BLOCKSIZ, fd);
+		fread(&dir.direct[j], 1, BLOCKSIZ, fd);
 		j += BLOCKSIZ / (DIRSIZ + 2);
 	}
 
