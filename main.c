@@ -108,7 +108,7 @@ void main()
 			logout(2118);
 			halt();
 		}
-	} while (online = 1);
+	} while (online == 1);
 	return;
 }
 

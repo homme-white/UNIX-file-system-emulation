@@ -9,7 +9,7 @@ struct inode* iget(unsigned int dinodeid)    /* iget( ) */
 	long addr;
 	struct inode* temp, * newinode;
 	inodeid = dinodeid % NHINO;
-	if (hinode[inodeid].i_forw == NULL) existed = 0;
+	if (hinode[inodeid].i_forw != NULL) existed = 0;
 	else
 	{
 		temp = hinode[inodeid].i_forw;
