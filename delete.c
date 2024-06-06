@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "filesys.h"
 
-void delete(char* filename)
+void delete_f(char* filename)
 {
 	unsigned int dinodeid, i;
 	struct inode* inode;

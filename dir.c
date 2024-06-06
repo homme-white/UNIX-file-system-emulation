@@ -8,19 +8,19 @@ void _dir()	/* _dir */
 	unsigned short int di_mode;
 	int i, one;
 	struct inode* temp_inode;
-	printf("\nCURRENT DIRECTORY ..\n");
+	printf("\nCURRENT DIRECTORY:dir.size=%d\n", dir.size);
 	for (i = 0; i < dir.size; i++)
 	{
 		//printf("%d", dir.size);
 		if (dir.direct[i].d_ino != DIEMPTY)
 		{
-			printf("%DIRSIZs", dir.direct[i].d_name);
+			printf("% 20s", dir.direct[i].d_name);
 			temp_inode = iget(dir.direct[i].d_ino);
 			di_mode = temp_inode->di_mode;
 			if (temp_inode->di_mode & DIFILE)
-				printf("f");
+				printf(" f");
 			else
-				printf("d");
+				printf(" d");
 			for (int j = 0; j < 9; j++)
 			{
 				one = di_mode % 2;
@@ -28,12 +28,12 @@ void _dir()	/* _dir */
 				if (one) printf("x");
 				else printf("-");
 			}
-			if (temp_inode->di_mode && DIFILE)
+			if (temp_inode->di_mode & DIFILE)
 			{
-				printf("%ld\n", temp_inode->di_size);
+				printf("%ld", temp_inode->di_size);
 				printf("block chain:");
 				for (int k = 0; k < temp_inode->di_size / BLOCKSIZ + 1; k++)
-					printf("%4d", temp_inode->di_addr[i]);
+					printf("%d", temp_inode->di_addr[k]);
 				printf("\n");
 			}
 			else printf("<dir>block chain:%d\n", dir.direct[i].d_ino);
@@ -86,6 +86,7 @@ void mkdir(char* dirname)	/* mkdir */
 	inode = ialloc();
 	dirid = inode->i_ino;
 	dir.direct[dirpos].d_ino = inode->i_ino;
+	dir.direct[dirpos + 1].d_ino = 0;
 	dir.size++;
 	/*	fill the new dir buf */
 	strcpy(buf[0].d_name, ".");
