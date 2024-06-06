@@ -3,6 +3,7 @@
 #include "filesys.h"
 #include <stdlib.h>
 #include <conio.h>
+#include <Windows.h>
 
 //struct hinode hinode[NHINO];
 //struct dir dir;
@@ -17,6 +18,7 @@
 
 void main()
 {
+	SetConsoleOutputCP(CP_UTF8);
 	unsigned short ab_fd1, ab_fd2, ab_fd3, ab_fd4;
 	unsigned short bhy_fd1;
 	char* buf;
@@ -46,28 +48,44 @@ void main()
 	format();
 
 	install();
-	strcpy(tprecord, "��ӭʹ��Utopian����ϵͳ\n��ѡ������Ҫ�Ĳ�����1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt\nroot@UtopianUnix:~/root&");
+	strcpy(tprecord, "欢迎使用Utopian操作系统\n请选择您需要的操作:1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt\nroot@UtopianUnix:~/root");
 
 	printf("\nCommand : dir  \n");
 	_dir();
 
 	login(2118, "abcd");
 	online = 1;
+	user_id = 0;
 	do {
-		printf("%s ", tprecord);
-		//fgets(cmd, sizeof(cmd), stdin); // ��ȡ���������
-		scanf("%d", &cmd);//��ȡ���������
+		printf("%s& ", tprecord);
+		//fgets(cmd, sizeof(cmd), stdin); // 获取输入的命令 
+		scanf("%d", &cmd);//获取输入的命令 
 		switch (cmd)
 		{
-		case 1:printf("\n�������ļ�����\n");
+		case 1:printf("\n请输入文件夹名\n");
 			scanf("%s", cmd_buff);
 			mkdir(cmd_buff);
 			break;
-		case 2:printf("\n�������ļ�����\n");
+		case 2:printf("\n请输入文件夹名\n");
 			scanf("%s", cmd_buff);
 			chdir(cmd_buff);
+			if (strcmp(cmd_buff, "..") == 0)
+			{
+				char temp[1000] = "";
+				char* q = strrchr(tprecord, 47);
+				strcpy(temp, tprecord);
+				int length = strlen(temp) - strlen(q);
+				*(temp + length) = '\0';
+				memset(tprecord, 0, 1000);
+				strcpy(tprecord, temp);
+			}
+			else
+			{
+				strcat(tprecord, "/");
+				strcat(tprecord, cmd_buff);
+			}
 			break;
-		case 3:printf("\n�������ļ���\n");
+		case 3:printf("\n请输入文件名\n");
 			scanf("%s", cmd_buff);
 			open[size] = creat(user_id, cmd_buff, 01777);
 			file_block = BLOCKSIZ * 6 + 5;
@@ -78,7 +96,7 @@ void main()
 			strcpy(list[size], cmd_buff);
 			size++;
 			break;
-		case 4:printf("\n�������ļ���\n");
+		case 4:printf("\n请输入文件名\n");
 			scanf("%s", cmd_buff);
 			delete_f(cmd_buff);
 			break;
@@ -93,6 +111,7 @@ void main()
 	} while (online = 1);
 	return;
 }
+
 
 /*user_id = 0;
 mkdir("a2118");

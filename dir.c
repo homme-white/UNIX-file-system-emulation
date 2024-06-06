@@ -117,7 +117,7 @@ void chdir(char* dirname) /* chdir */
 	if (dirid == NULL)
 	{
 		printf("\n%s does not existed\n", dirname);
-		return - 1;
+		return -1;
 	}
 	inode = iget(dirid);
 	if (!access(user_id, inode, user[user_id].u_default_mode))
@@ -129,11 +129,12 @@ void chdir(char* dirname) /* chdir */
 	/* pack the current directory */
 	for (i = 0; i < dir.size; i++)
 	{
-		for (j = 0; j < DIRNUM; j++)
-			if (dir.direct[j].d_ino == 0) break;
-		memcpy(&dir.direct[j], &dir.direct[i], DIRSIZ + 2);
+		for (j = i + 1; j < DIRNUM; j++)
+			if (dir.direct[j].d_ino != 0)
+				break;
+		memcpy(&dir.direct[i], &dir.direct[j], DIRSIZ + 2);
 		dir.direct[j].d_ino = 0;
-			
+
 	}
 
 	/*	write back the current directory */
@@ -143,26 +144,33 @@ void chdir(char* dirname) /* chdir */
 		bfree(cur_path_inode->di_addr[i]);
 	}
 
-	for (i = 0; i < dir.size; i += BLOCKSIZ / (DIRSIZ + 2))
+	for (i = 0, j = 0; i < dir.size; i += BLOCKSIZ / (DIRSIZ + 2), j++)
 	{
 
+		//分配一个磁盘块，容纳32个目录
 		block = balloc();
-		cur_path_inode->di_addr[i] = block;
+		//将目录分配到这个磁盘块上存储
+		cur_path_inode->di_addr[j] = block;
+		//定位到该空闲磁盘处
 		fseek(fd, DATASTART + block * BLOCKSIZ, SEEK_SET);
-		fwrite(&dir.direct[0], 1, BLOCKSIZ, fd);
+		//将dir.direct[j]的内容写入到该空闲磁盘处
+		//将目录中的足够多的fcb信息重新写入磁盘
+		//这里fwrite可以尽量写多
+		fwrite(&dir.direct[j], BLOCKSIZ, 1, fd);
 	}
 	cur_path_inode->di_size = dir.size * (DIRSIZ + 2);
 	iput(cur_path_inode);
 	cur_path_inode = inode;
-	dir.size = inode->di_size / (DIRSIZ + 2);
+	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);
 	/*	read the change dir from disk */
-	
 
-	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
+
+	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + (inode->di_size % BLOCKSIZ != 0); i++, j += BLOCKSIZ / (DIRSIZ + 2))
 	{
+		//读取新的目录数据块
 		fseek(fd, DATASTART + inode->di_addr[i] * BLOCKSIZ, SEEK_SET);
-		fread(&dir.direct[0], 1, BLOCKSIZ, fd);
-		j += BLOCKSIZ / (DIRSIZ + 2);
+		//读取fcb到dir
+		fread(&dir.direct[j], BLOCKSIZ, 1, fd);
 	}
 
 	return;
