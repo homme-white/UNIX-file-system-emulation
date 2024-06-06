@@ -15,7 +15,7 @@ struct inode* iget(unsigned int dinodeid)    /* iget( ) */
 		temp = hinode[inodeid].i_forw;
 		while (temp)
 		{
-			if (temp->i_ino == inodeid)
+			if (temp->i_ino == dinodeid)
 				/*existed */
 			{
 				existed = 1;
@@ -35,7 +35,7 @@ struct inode* iget(unsigned int dinodeid)    /* iget( ) */
 	fread(&(newinode->di_number), DINODESIZ, 1, fd);
 	/* 4.put it into hinode[inodeid] queue */
 	newinode->i_forw = hinode[inodeid].i_forw;
-	newinode->i_back = newinode;
+	newinode->i_back = &hinode[inodeid];
 	if (newinode->i_forw != NULL)
 		newinode->i_forw->i_back = newinode;
 	hinode[inodeid].i_forw = newinode;
@@ -75,11 +75,10 @@ void iput(struct inode* pinode) /* iput ( ) */
 			block_num = pinode->di_size / BLOCKSIZ;
 			for (i = 0; i < block_num; i++)
 			{
-				pinode->di_addr[i] = balloc();
+				bfree(pinode->di_addr[i]);
 			}
 			ifree(pinode->i_ino);
-		};
-
+		}
 		/*	free the node in the memory */
 		if (pinode->i_forw == NULL)
 			pinode->i_back->i_forw = NULL;
@@ -87,6 +86,6 @@ void iput(struct inode* pinode) /* iput ( ) */
 			pinode->i_forw->i_back = pinode->i_back;
 			pinode->i_back->i_forw = pinode->i_forw;
 		};
-		ifree(pinode);
+		free(pinode);
 	};
 }

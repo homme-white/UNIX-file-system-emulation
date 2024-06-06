@@ -51,8 +51,9 @@ void ifree(unsigned dinodeid)	 /* ifree */
 	filsys.s_ninode++;
 	if (filsys.s_pinode != NICINOD)    /* notfull */
 	{
+		filsys.s_pinode--;//?
 		filsys.s_inode[filsys.s_pinode] = dinodeid;
-		filsys.s_pinode++;
+		
 	}
 	else /* full */
 	{

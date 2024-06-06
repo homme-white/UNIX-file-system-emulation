@@ -28,12 +28,12 @@ struct pwd * tmp5 = pwd;
 struct user*tmp6 = user;
 struct inode* tmp7 = &cur_path_inode;
 
-	printf("\nDo you want to format the disk \n");
-	if (getch() == 'y')
-	{
-		printf("\nFormat Will erase all context on the disk \nAre You Sure! (y(es)/n(o)! \n");
-	}
-	if (getch() == 'y')
+	//printf("\nDo you want to format the disk \n");
+	//if (getch() == 'y')
+	//{
+	//	printf("\nFormat Will erase all context on the disk \nAre You Sure! (y(es)/n(o)! \n");
+	//}
+	//if (getch() == 'y')
 		format();
 
 	install();

@@ -117,14 +117,14 @@ void chdir(char* dirname) /* chdir */
 	if (dirid == NULL)
 	{
 		printf("\n%s does not existed\n", dirname);
-		return;
+		return - 1;
 	}
 	inode = iget(dirid);
 	if (!access(user_id, inode, user[user_id].u_default_mode))
 	{
 		printf("\nhas not access to the directory %s", dirname);
 		iput(inode);
-		return;
+		return -1;
 	}
 	/* pack the current directory */
 	for (i = 0; i < dir.size; i++)
@@ -133,6 +133,7 @@ void chdir(char* dirname) /* chdir */
 			if (dir.direct[j].d_ino == 0) break;
 		memcpy(&dir.direct[j], &dir.direct[i], DIRSIZ + 2);
 		dir.direct[j].d_ino = 0;
+			
 	}
 
 	/*	write back the current directory */
@@ -155,9 +156,9 @@ void chdir(char* dirname) /* chdir */
 	cur_path_inode = inode;
 	dir.size = inode->di_size / (DIRSIZ + 2);
 	/*	read the change dir from disk */
-	j = 0;
+	
 
-	for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
+	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
 	{
 		fseek(fd, DATASTART + inode->di_addr[i] * BLOCKSIZ, SEEK_SET);
 		fread(&dir.direct[0], 1, BLOCKSIZ, fd);
