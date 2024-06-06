@@ -66,6 +66,7 @@ int logout(unsigned short uid)//µÇ³ö
 			user[i].u_ofile[j] = SYSOPENFILE + 1;
 		}
 	}
+	printf("no user in the file system\n");
 	return 1;
 }
 
@@ -77,7 +78,7 @@ int regist()
 	unsigned short passwd_gid;
 
 	for (i = 0; i < PWDNUM; i++) {
-		if (pwd[i].p_uid == 0 && pwd[i].p_gid == 0) 
+		if (pwd[i].p_uid == 0 && pwd[i].p_gid == 0)
 		{
 			break;
 		}
