@@ -52,11 +52,11 @@ void install()
 	for (i = 0; i < dir.size / (BLOCKSIZ / (DIRSIZ + 2)); i++)
 	{
 		//printf("%d___", DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i]);
-		fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);
+		fseek(fd, DATASTART + BLOCKSIZ * node_address(cur_path_inode, i), SEEK_SET);
 		fread(&dir.direct[(BLOCKSIZ / (DIRSIZ + 2)) * i], 1, BLOCKSIZ, fd);
 	}
 	//printf("\n");
-	fseek(fd, DATASTART + BLOCKSIZ * cur_path_inode->di_addr[i], SEEK_SET);
+	fseek(fd, DATASTART + BLOCKSIZ * node_address(cur_path_inode, i), SEEK_SET);
 	fread(&dir.direct[(BLOCKSIZ) / (DIRSIZ + 2) * i], 1, cur_path_inode->di_size % BLOCKSIZ, fd);//取模得出小于32（一块）的目录
 
 	/*6. read the pwd to initialize the pwd*/

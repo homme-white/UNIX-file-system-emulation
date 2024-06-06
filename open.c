@@ -52,7 +52,7 @@ unsigned short aopen(int user_id, char* filename, unsigned short openmode)
 	if (!(openmode & FAPPEND))
 	{
 		for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
-			bfree(inode->di_addr[i]);
+			bfree(node_address(inode,i));
 		inode->di_size = 0;
 	}
 	return j;

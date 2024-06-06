@@ -31,13 +31,13 @@ unsigned int read(int fd, char* buf, unsigned int size) {
 
 	// 如果读取内容跨越不到一个块
 	if (block_off + size < BLOCKSIZ) {
-		fseek(fd, DATASTART + inode->di_addr[block] * BLOCKSIZ + block_off, SEEK_SET);
+		fseek(fd, DATASTART + node_address(inode,block) * BLOCKSIZ + block_off, SEEK_SET);
 		fread(buf, 1, size, fd);
 		sys_ofile[user[user_id].u_ofile[fd]].f_off += size; // 更新文件偏移量
 		return size;
 	}
 
-	fseek(fd, DATASTART + inode->di_addr[block] * BLOCKSIZ + block_off, SEEK_SET);
+	fseek(fd, DATASTART + node_address(inode, block) * BLOCKSIZ + block_off, SEEK_SET);
 	fread(temp_buf, 1, BLOCKSIZ - block_off, fd);
 	temp_buf += BLOCKSIZ - block_off;
 
@@ -45,7 +45,7 @@ unsigned int read(int fd, char* buf, unsigned int size) {
 	j = (size - (BLOCKSIZ - block_off)) / BLOCKSIZ;
 	for (i = 0; i < j; i++) {
 		block++;
-		fseek(fd, DATASTART + inode->di_addr[block] * BLOCKSIZ, SEEK_SET);
+		fseek(fd, DATASTART + node_address(inode, block) * BLOCKSIZ, SEEK_SET);
 		fread(temp_buf, 1, BLOCKSIZ, fd);
 		temp_buf += BLOCKSIZ;
 	}
@@ -53,7 +53,7 @@ unsigned int read(int fd, char* buf, unsigned int size) {
 	// 读取最后剩余部分
 	if ((size - (BLOCKSIZ - block_off)) % BLOCKSIZ > 0) {
 		block++;
-		fseek(fd, DATASTART + inode->di_addr[block] * BLOCKSIZ, SEEK_SET);
+		fseek(fd, DATASTART + node_address(inode, block) * BLOCKSIZ, SEEK_SET);
 		fread(temp_buf, 1, (size - (BLOCKSIZ - block_off)) % BLOCKSIZ, fd);
 	}
 
@@ -84,7 +84,7 @@ unsigned int write(int fdu, char* buf, unsigned int size) {
 
 	// 如果写入内容跨越不到一个块
 	if (block_off + size < BLOCKSIZ) {
-		fseek(fd, DATASTART + inode->di_addr[block] * BLOCKSIZ + block_off, SEEK_SET);
+		fseek(fd, DATASTART + node_address(inode, block) * BLOCKSIZ + block_off, SEEK_SET);
 		fwrite(buf, 1, size, fd);
 		printf("Write Success!\n");
 		return size;
@@ -92,22 +92,22 @@ unsigned int write(int fdu, char* buf, unsigned int size) {
 	if (sys_ofile[user[user_id].u_ofile[fdu]].f_flag == FAPPEND)
 	{
 		// 写入剩余的块部分
-		fseek(fd, DATASTART + inode->di_addr[block] * BLOCKSIZ + block_off, SEEK_SET);
+		fseek(fd, DATASTART + node_address(inode, block) * BLOCKSIZ + block_off, SEEK_SET);
 		fwrite(temp_buf, 1, BLOCKSIZ - block_off, fd);
 		temp_buf += BLOCKSIZ - block_off;
 		k = 1;
 	}
 	// 按块写入数据，并为新块分配存储空间
 	for (i = 0; i < (size - k * (BLOCKSIZ - block_off)) / BLOCKSIZ; i++) {
-		inode->di_addr[block + k + i] = balloc();
-		fseek(fd, DATASTART + inode->di_addr[block + k + i] * BLOCKSIZ, SEEK_SET);
+		di_addr_create(inode, block + k + i);
+		fseek(fd, DATASTART + node_address(inode, block + k + i) * BLOCKSIZ, SEEK_SET);
 		fwrite(temp_buf, 1, BLOCKSIZ, fd);
 		temp_buf += BLOCKSIZ;
 	}
 
 	block_off = (size - k * (BLOCKSIZ - block_off)) % BLOCKSIZ;
-	inode->di_addr[block + k + i] = balloc();
-	block = inode->di_addr[block + k + i];
+	di_addr_create(inode, block + k + i);
+	block = node_address(inode, block + k + i);
 	fseek(fd, DATASTART + block * BLOCKSIZ, SEEK_SET);
 	fwrite(temp_buf, 1, block_off, fd);
 	sys_ofile[user[user_id].u_ofile[fdu]].f_off += size; // 更新文件偏移量

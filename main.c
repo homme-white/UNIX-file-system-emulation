@@ -88,9 +88,9 @@ void main()
 		case 3:printf("\n请输入文件名\n");
 			scanf("%s", cmd_buff);
 			open[size] = creat(user_id, cmd_buff, 01777);
-			file_block = BLOCKSIZ * 6 + 5;
-			buf = (char*)malloc(BLOCKSIZ * 6 + 5);
-			write(open[size], buf, BLOCKSIZ * 6 + 5);
+			file_block = BLOCKSIZ * 10  + 5;
+			buf = (char*)malloc(BLOCKSIZ * 10 + 5);
+			write(open[size], buf, BLOCKSIZ * 10 + 5);
 			close(user_id, open[size]);
 			free(buf);
 			strcpy(list[size], cmd_buff);
@@ -103,6 +103,18 @@ void main()
 		case 5:
 			_dir();
 			break;
+		//case 6:printf("\n请输入文件名\n");
+		//	scanf("%s", cmd_buff);
+		//	{
+		//		char cmd_buff1[1000] = "";
+		//		printf("\n请输入文件名\n");
+		//		scanf("%s", cmd_buff1);
+		//		char cmd_buff2[1000] = "";
+		//		printf("\n请输入文件名\n");
+		//		scanf("%s", cmd_buff2);
+		//		cat(cmd_buff, cmd_buff1, cmd_buff2);
+		//	}
+		//	break;
 		case 0:
 			online = -1;
 			logout(2118);

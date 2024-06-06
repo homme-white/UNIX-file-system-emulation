@@ -73,7 +73,7 @@ void iput(struct inode* pinode) /* iput ( ) */
 			block_num = pinode->di_size / BLOCKSIZ;
 			for (i = 0; i < block_num; i++)
 			{
-				bfree(pinode->di_addr[i]);
+				bfree(node_address(pinode,i));
 			}
 			ifree(pinode->i_ino);
 		}

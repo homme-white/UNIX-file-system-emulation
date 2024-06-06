@@ -71,7 +71,13 @@
     <ClCompile Include="delete.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="block_addr.c">
+    <ClCompile Include="node_address.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="mv.c">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cat.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

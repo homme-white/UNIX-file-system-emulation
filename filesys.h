@@ -140,7 +140,7 @@ extern void   _dir();
 void   mkdir();
 void   chdir();
 extern unsigned short aopen();
-int   creat();
+int creat(unsigned int user_id, char* filename, unsigned short mode);
 extern unsigned int read();
 extern unsigned int write();
 int    login();
@@ -151,4 +151,8 @@ void   close();
 extern void   halt();
 extern void   delete_f();//删除文件函数delete_f
 char* GetFilename(char* p);//获取文件名
+unsigned short node_address(struct inode* inode, unsigned int num);
+unsigned short di_addr_create(struct inode* inode, unsigned int num);
+unsigned short empty_addr(struct inode* inode);
+void cat(char* name1, char* name2, char* name3);
 #endif // !_FILESYS_H_
