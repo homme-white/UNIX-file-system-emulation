@@ -162,6 +162,7 @@
     <ClCompile Include="install.c" />
     <ClCompile Include="log.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="mv.c" />
     <ClCompile Include="name.c" />
     <ClCompile Include="open.c" />
     <ClCompile Include="rdwt.c" />
