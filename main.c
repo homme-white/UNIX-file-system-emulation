@@ -49,8 +49,10 @@ struct inode* tmp7 = &cur_path_inode;
 	file_block = BLOCKSIZ * 6 + 5;
 	buf = (char*)malloc(BLOCKSIZ * 6 + 5);
 	write(ab_fd1, buf, BLOCKSIZ * 6 + 5);
+	_dir();
 	close(user_id, ab_fd1);
 	free(buf);
+	_dir();
 
 	mkdir("subdir");
 	chdir("subdir");

@@ -9,6 +9,7 @@ void _dir()	/* _dir */
 	int i, one;
 	struct inode* temp_inode;
 	printf("\nCURRENT DIRECTORY:dir.size=%d\n", dir.size);
+	printf("%d", dir.size);
 	for (i = 0; i < dir.size; i++)
 	{
 		//printf("%d", dir.size);
@@ -103,6 +104,7 @@ void mkdir(char* dirname)	/* mkdir */
 	inode->di_uid = user[user_id].u_uid;
 	inode->di_gid = user[user_id].u_gid;
 	inode->di_addr[0] = block;
+
 	iput(inode);
 	return;
 }
@@ -112,6 +114,7 @@ void chdir(char* dirname) /* chdir */
 	unsigned int dirid;
 	struct inode* inode;
 	unsigned short block;
+	struct dir* temp = &dir;
 	int i, j, low = 0, high = 0;
 	dirid = namei(dirname);
 	if (dirid == NULL)
@@ -129,12 +132,29 @@ void chdir(char* dirname) /* chdir */
 	/* pack the current directory */
 	for (i = 0; i < dir.size; i++)
 	{
-		for (j = 0; j < DIRNUM; j++)
-			if (dir.direct[j].d_ino == 0) break;
-		memcpy(&dir.direct[j], &dir.direct[i], DIRSIZ + 2);
-		dir.direct[j].d_ino = 0;
-			
+		//如果当前目录项没有使用
+		if (dir.direct[i].d_ino == 0)
+		{
+			//如果当中有被使用的目录项，则将目录项聚合在一起
+			for (j = i + 1; j < DIRNUM; j++)//?
+				if (dir.direct[j].d_ino == 0)
+					break;
+			memcpy(&dir.direct[i], &dir.direct[j], DIRSIZ + 2);
+			dir.direct[j].d_ino = 0;
+		}
 	}
+	//for (i = 0; i < dir.size; i++)
+	//{
+	//	for (j = 0; j < DIRNUM; j++) {
+	//		if (dir.direct[j].d_ino == 0)
+	//		{
+	//			break;
+	//		}
+	//	}
+	//	memcpy(&dir.direct[j], &dir.direct[i], DIRSIZ + 2);
+	//	dir.direct[j].d_ino = 0;
+
+	//}
 
 	/*	write back the current directory */
 
@@ -154,7 +174,7 @@ void chdir(char* dirname) /* chdir */
 	cur_path_inode->di_size = dir.size * (DIRSIZ + 2);
 	iput(cur_path_inode);
 	cur_path_inode = inode;
-	dir.size = inode->di_size / (DIRSIZ + 2);
+	dir.size = cur_path_inode->di_size / (DIRSIZ + 2);
 	/*	read the change dir from disk */
 	
 
