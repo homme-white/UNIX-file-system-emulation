@@ -61,7 +61,7 @@ unsigned short di_addr_create(struct inode* inode, unsigned short num)//输入节点
 
 unsigned short empty_addr(struct inode* inode)//输入节点返回下一个空的addr
 {
-	return (inode->di_size - (BLOCKSIZ - 1)) / BLOCKSIZ;
+	return (inode->di_size - 1) / BLOCKSIZ  + 1;
 }
 //void node_revise(struct inode* inode, unsigned short num, unsigned short ino)//输入节点和第几个还有改后的ino，返回对应的块号
 //{
