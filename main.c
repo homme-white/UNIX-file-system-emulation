@@ -48,7 +48,7 @@ void main()
 	format();
 
 	install();
-	strcpy(tprecord, "欢迎使用Utopian操作系统\n请选择您需要的操作:1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt 6.rename\nroot@UtopianUnix:~/root");
+	strcpy(tprecord, "欢迎使用Utopian操作系统\n请选择您需要的操作:1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 6.rename 7.mv 0.logout and halt\nroot@UtopianUnix:~/root");
 
 	printf("\nCommand : dir  \n");
 	_dir();
@@ -88,7 +88,7 @@ void main()
 		case 3:printf("\n请输入文件名\n");
 			scanf("%s", cmd_buff);
 			open[size] = creat(user_id, cmd_buff, 01777);
-			file_block = BLOCKSIZ * 10  + 5;
+			file_block = BLOCKSIZ * 10 + 5;
 			buf = (char*)malloc(BLOCKSIZ * 10 + 5);
 			write(open[size], buf, BLOCKSIZ * 10 + 5);
 			close(user_id, open[size]);
@@ -110,22 +110,53 @@ void main()
 			scanf("%s", cmd_buff1);
 			rename(cmd_buff, cmd_buff1);
 			break;
-		//case 6:printf("\n请输入文件名\n");
-		//	scanf("%s", cmd_buff);
-		//	{
-		//		char cmd_buff1[1000] = "";
-		//		printf("\n请输入文件名\n");
-		//		scanf("%s", cmd_buff1);
-		//		char cmd_buff2[1000] = "";
-		//		printf("\n请输入文件名\n");
-		//		scanf("%s", cmd_buff2);
-		//		cat(cmd_buff, cmd_buff1, cmd_buff2);
-		//	}
-		//	break;
+		case 7:printf("\n请输入文件名\n");
+			scanf("%s", cmd_buff);
+			delete_f(cmd_buff);
+			printf("\n请输入文件夹名\n");
+			scanf("%s", cmd_buff1);
+			chdir(cmd_buff1);
+			if (strcmp(cmd_buff1, "..") == 0)
+			{
+				char temp[1000] = "";
+				char* q = strrchr(tprecord, 47);
+				strcpy(temp, tprecord);
+				int length = strlen(temp) - strlen(q);
+				*(temp + length) = '\0';
+				memset(tprecord, 0, 1000);
+				strcpy(tprecord, temp);
+			}
+			else
+			{
+				strcat(tprecord, "/");
+				strcat(tprecord, cmd_buff1);
+			}
+			open[size] = creat(user_id, cmd_buff, 01777);
+			file_block = BLOCKSIZ * 10 + 5;
+			buf = (char*)malloc(BLOCKSIZ * 10 + 5);
+			write(open[size], buf, BLOCKSIZ * 10 + 5);
+			close(user_id, open[size]);
+			free(buf);
+			strcpy(list[size], cmd_buff);
+			size++;
+			break;
+			//case 6:printf("\n请输入文件名\n");
+			//	scanf("%s", cmd_buff);
+			//	{
+			//		char cmd_buff1[1000] = "";
+			//		printf("\n请输入文件名\n");
+			//		scanf("%s", cmd_buff1);
+			//		char cmd_buff2[1000] = "";
+			//		printf("\n请输入文件名\n");
+			//		scanf("%s", cmd_buff2);
+			//		cat(cmd_buff, cmd_buff1, cmd_buff2);
+			//	}
+			//	break;
 		case 0:
 			online = -1;
 			logout(2118);
 			halt();
+		default:;
 		}
 	} while (online == 1);
 	return;
