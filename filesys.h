@@ -142,7 +142,7 @@ void   chdir();
 extern unsigned short aopen();
 int creat(unsigned int user_id, char* filename, unsigned short mode);
 extern unsigned int read();
-extern unsigned int write();
+unsigned int write();
 int    login();
 int  logout();
 void   install();

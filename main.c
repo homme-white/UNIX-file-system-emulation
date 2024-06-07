@@ -103,18 +103,18 @@ void main()
 		case 5:
 			_dir();
 			break;
-		//case 6:printf("\n请输入文件名\n");
-		//	scanf("%s", cmd_buff);
-		//	{
-		//		char cmd_buff1[1000] = "";
-		//		printf("\n请输入文件名\n");
-		//		scanf("%s", cmd_buff1);
-		//		char cmd_buff2[1000] = "";
-		//		printf("\n请输入文件名\n");
-		//		scanf("%s", cmd_buff2);
-		//		cat(cmd_buff, cmd_buff1, cmd_buff2);
-		//	}
-		//	break;
+		case 6:printf("\n请输入文件名\n");
+			scanf("%s", cmd_buff);
+			{
+				char cmd_buff1[1000] = "";
+				printf("\n请输入文件名\n");
+				scanf("%s", cmd_buff1);
+				char cmd_buff2[1000] = "";
+				printf("\n请输入文件名\n");
+				scanf("%s", cmd_buff2);
+				cat(cmd_buff, cmd_buff1, cmd_buff2);
+			}
+			break;
 		case 0:
 			online = -1;
 			logout(2118);
