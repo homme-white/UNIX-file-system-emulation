@@ -48,7 +48,7 @@ void main()
 	format();
 
 	install();
-	strcpy(tprecord, "欢迎使用Utopian操作系统\n请选择您需要的操作:1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt\nroot@UtopianUnix:~/root");
+	strcpy(tprecord, "欢迎使用Utopian操作系统\n请选择您需要的操作:1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 0.logout and halt 6.rename\nroot@UtopianUnix:~/root");
 
 	printf("\nCommand : dir  \n");
 	_dir();
@@ -102,6 +102,13 @@ void main()
 			break;
 		case 5:
 			_dir();
+			break;
+		case 6:printf("\n请输入文件名\n");
+			scanf("%s", cmd_buff);
+			char cmd_buff1[1000] = "";
+			printf("\n请输入新文件名\n");
+			scanf("%s", cmd_buff1);
+			rename(cmd_buff, cmd_buff1);
 			break;
 		case 0:
 			online = -1;

@@ -53,6 +53,24 @@ char* GetFilename(char* p)
 	return q;
 }
 
+int rename(char* name, char* re)
+{
+	struct dir temp = dir;
+	int i, notfound = 1;
+	for (i = 0; ((i < dir.size) && (notfound)); i++)
+	{
+		if ((!strcmp(dir.direct[i].d_name, name)) && (dir.direct[i].d_ino != 0))
+		{
+			strcpy(dir.direct[i].d_name, re);
+			return 0;
+			/* find */
+		}
+	}
+	/* notfind */
+	return NULL;
+
+}
+
 //int main() {
 //	char name[30] = "baobaobaba\\baoerzi\\abcde";
 //	char* a;

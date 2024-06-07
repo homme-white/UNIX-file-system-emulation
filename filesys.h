@@ -148,6 +148,7 @@ int  logout();
 void   install();
 void   format();
 void   close();
+int rename(char* name, char* re);
 extern void   halt();
 extern void   delete_f();//删除文件函数delete_f
 char* GetFilename(char* p);//获取文件名
