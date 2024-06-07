@@ -34,7 +34,7 @@ void _dir()	/* _dir */
 				printf("%ld", temp_inode->di_size);
 				printf("block chain:");
 				for (int k = 0; k < temp_inode->di_size / BLOCKSIZ + 1; k++)
-					printf("%d", temp_inode->di_addr[k]);
+					printf("%d-", node_address(temp_inode, k));
 				printf("\n");
 			}
 			else printf("<dir>block chain:%d\n", dir.direct[i].d_ino);
@@ -160,14 +160,12 @@ void chdir(char* dirname) /* chdir */
 
 	for (i = 0; i < cur_path_inode->di_size / BLOCKSIZ + 1; i++)
 	{
-		bfree(cur_path_inode->di_addr[i]);
+		bfree(node_address(cur_path_inode, i));
 	}
 
 	for (i = 0, j = 0; i < dir.size; i += BLOCKSIZ / (DIRSIZ + 2), j++)
 	{
-
-		block = balloc();//?
-		cur_path_inode->di_addr[j] = block;
+		block = di_addr_create(cur_path_inode, j);
 		fseek(fd, DATASTART + block * BLOCKSIZ, SEEK_SET);
 		fwrite(&dir.direct[j], 1, BLOCKSIZ, fd);
 	}
@@ -180,7 +178,7 @@ void chdir(char* dirname) /* chdir */
 	for (i = 0, j = 0; i < inode->di_size / BLOCKSIZ + (inode->di_size % BLOCKSIZ != 0); i++)
 	{
 		//��ȡ�µ�Ŀ¼���ݿ�
-		fseek(fd, DATASTART + inode->di_addr[i] * BLOCKSIZ, SEEK_SET);
+		fseek(fd, DATASTART + node_address(inode, i) * BLOCKSIZ, SEEK_SET);
 		fread(&dir.direct[j], 1, BLOCKSIZ, fd);
 		j += BLOCKSIZ / (DIRSIZ + 2);
 	}

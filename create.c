@@ -19,7 +19,7 @@ int creat(unsigned int user_id, char* filename, unsigned short mode)
 		/* free all the block of the old file */
 		for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
 		{
-			bfree(inode->di_addr[i]);
+			bfree(node_address(inode,i));
 		}
 
 		/* to do: add code here to update the pointer of the sys_file */
