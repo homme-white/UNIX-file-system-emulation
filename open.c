@@ -7,7 +7,7 @@ unsigned short aopen(int user_id, char* filename, unsigned short openmode)
 	struct inode* inode;
 	int i, j;
 	dinodeid = namei(filename);
-	if (dinodeid != NULL)    /* nosuchfile */
+	if (dinodeid = NULL)    /* nosuchfile */
 	{
 		printf("\nfile does not existed!!\n");
 		return NULL;
@@ -52,7 +52,7 @@ unsigned short aopen(int user_id, char* filename, unsigned short openmode)
 	if (!(openmode & FAPPEND))
 	{
 		for (i = 0; i < inode->di_size / BLOCKSIZ + 1; i++)
-			bfree(node_address(inode,i));
+			bfree(node_address(inode, i));
 		inode->di_size = 0;
 	}
 	return j;

@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <Windows.h>
-
+#define FNUM 10
+#define FOFF 0
 //struct hinode hinode[NHINO];
 //struct dir dir;
 //struct file sys_ofile[SYSOPENFILE];
@@ -39,16 +40,16 @@ void main()
 	struct user* tmp6 = user;
 	struct inode* tmp7 = &cur_path_inode;
 
-	/*printf("\nDo you want to format the disk \n");
+	printf("\nDo you want to format the disk \n");
 	if (getch() == 'y')
 	{
 		printf("\nFormat Will erase all context on the disk \nAre You Sure! (y(es)/n(o)! \n");
 	}
-	if (getch() == 'y')*/
-	format();
+	if (getch() == 'y')
+		format();
 
 	install();
-	strcpy(tprecord, "欢迎使用Utopian操作系统\n请选择您需要的操作:1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 6.rename 7.mv 0.logout and halt\nroot@UtopianUnix:~/root");
+	strcpy(tprecord, "欢迎使用Utopian操作系统 (@ v @)\n请选择您需要的操作:1.mkdir 2.chdir 3.creat&write&close 4.delete 5.ls 6.rename 7.mv 8.cat 0.logout and halt\nroot@UtopianUnix:~/root");
 
 	printf("\nCommand : dir  \n");
 	_dir();
@@ -68,7 +69,7 @@ void main()
 			break;
 		case 2:printf("\n请输入文件夹名\n");
 			scanf("%s", cmd_buff);
-			chdir(cmd_buff);
+			int check = chdir(cmd_buff);
 			if (strcmp(cmd_buff, "..") == 0)
 			{
 				char temp[1000] = "";
@@ -79,7 +80,7 @@ void main()
 				memset(tprecord, 0, 1000);
 				strcpy(tprecord, temp);
 			}
-			else
+			else if (check == 0)
 			{
 				strcat(tprecord, "/");
 				strcat(tprecord, cmd_buff);
@@ -88,13 +89,32 @@ void main()
 		case 3:printf("\n请输入文件名\n");
 			scanf("%s", cmd_buff);
 			open[size] = creat(user_id, cmd_buff, 01777);
-			file_block = BLOCKSIZ * 10 + 5;
-			buf = (char*)malloc(BLOCKSIZ * 10 + 5);
-			write(open[size], buf, BLOCKSIZ * 10 + 5);
-			close(user_id, open[size]);
+			file_block = BLOCKSIZ * FNUM + FOFF;
+			buf = (char*)malloc(BLOCKSIZ * (FNUM + 1));
+			char cmd_buff3[BLOCKSIZ] = "";
+			/*scanf("%s", cmd_buff3);*/
+			char cmd_buff4[BLOCKSIZ * FNUM + FOFF] = "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff";
+
+			//strcpy(buf, );
+
+			write(open[size], cmd_buff4, sizeof(cmd_buff4));
+
 			free(buf);
 			strcpy(list[size], cmd_buff);
 			size++;
+			/*	unsigned short tmp = aopen(0, cmd_buff, 01777);*/
+			struct inode* n = sys_ofile[user[user_id].u_ofile[0]].f_inode;
+			int num = (n->di_size - 1) / BLOCKSIZ + 1;
+			for (int i = 0; i < num; i++) {
+				fseek(fd, DATASTART + node_address(n, i) * BLOCKSIZ, SEEK_SET);
+				fread(cmd_buff3, 1, BLOCKSIZ, fd);
+				printf("\nblock:%d", node_address(n, i));
+				for (int j = 0; j < BLOCKSIZ; j++) {
+					printf("%c", cmd_buff3[j]);
+				}
+			}
+			//			close(user_id, open[size]);
+			close(user_id, open[size]);
 			break;
 		case 4:printf("\n请输入文件名\n");
 			scanf("%s", cmd_buff);
@@ -132,26 +152,26 @@ void main()
 				strcat(tprecord, cmd_buff1);
 			}
 			open[size] = creat(user_id, cmd_buff, 01777);
-			file_block = BLOCKSIZ * 10 + 5;
-			buf = (char*)malloc(BLOCKSIZ * 10 + 5);
-			write(open[size], buf, BLOCKSIZ * 10 + 5);
+			file_block = BLOCKSIZ * FNUM + FOFF;
+			buf = (char*)malloc(BLOCKSIZ * FNUM + FOFF);
+			write(open[size], buf, BLOCKSIZ * FNUM + FOFF);
 			close(user_id, open[size]);
 			free(buf);
 			strcpy(list[size], cmd_buff);
 			size++;
 			break;
-			//case 6:printf("\n请输入文件名\n");
-			//	scanf("%s", cmd_buff);
-			//	{
-			//		char cmd_buff1[1000] = "";
-			//		printf("\n请输入文件名\n");
-			//		scanf("%s", cmd_buff1);
-			//		char cmd_buff2[1000] = "";
-			//		printf("\n请输入文件名\n");
-			//		scanf("%s", cmd_buff2);
-			//		cat(cmd_buff, cmd_buff1, cmd_buff2);
-			//	}
-			//	break;
+		case 8:printf("\n请输入文件名\n");
+			scanf("%s", cmd_buff);
+			{
+				char cmd_buff1[1000] = "";
+				printf("\n请输入文件名\n");
+				scanf("%s", cmd_buff1);
+				char cmd_buff2[1000] = "";
+				printf("\n请输入文件名\n");
+				scanf("%s", cmd_buff2);
+				cat(cmd_buff, cmd_buff1, cmd_buff2);
+			}
+			break;
 		case 0:
 			online = -1;
 			logout(2118);
